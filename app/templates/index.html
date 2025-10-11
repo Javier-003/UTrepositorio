@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Integradora - Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido a Integradora</h1>
+    <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+
+    {% if session.get('user') %}
+        <p>Hola, {{ session.get('user') }}!</p>
+        <a href="{{ url_for('repos.repositorios') }}">
+            <button>Ir a Mis Repositorios</button>
+        </a>
+        <a href="{{ url_for('usuarios.logout') }}">
+            <button>Cerrar sesión</button>
+        </a>
+    {% else %}
+        <a href="{{ url_for('usuarios.registro') }}">
+            <button>Crear usuario</button>
+        </a>
+        <a href="{{ url_for('usuarios.login') }}">
+            <button>Iniciar sesión</button>
+        </a>
+    {% endif %}
+</body>
+</html>

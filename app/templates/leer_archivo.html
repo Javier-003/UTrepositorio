@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Archivo: {{ archivo }} en {{ repo }}</h2>
+
+{% set parent_path = archivo.rsplit('/', 1)[0] if '/' in archivo else '' %}
+<a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=parent_path) }}">🔙 Volver</a>
+
+<pre style="background:#f5f5f5; padding:10px; border:1px solid #ccc;">{{ contenido }}</pre>
+{% endblock %}

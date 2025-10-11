@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Repositorio: {{ repo }}</h2>
+{% if path %}
+<p>Ruta: {{ path }}</p>
+<a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=path.rsplit('/', 1)[0]) }}">🔙 Volver</a>
+{% endif %}
+<ul>
+{% for f in archivos %}
+    <li>
+        {% if f.type == 'dir' %}
+            📁 <a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=f.path) }}">{{ f.name }}</a>
+        {% else %}
+            📄 <a href="{{ url_for('repos.leer_archivo', repo=repo, filepath=f.path) }}">{{ f.name }}</a>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
