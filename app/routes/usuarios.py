@@ -3,7 +3,7 @@ import requests
 import time
 from config import Config
 
-GITEA_URL = "http://localhost:3000/api/v1"
+GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
 ADMIN_TOKEN = Config.GITEA_TOKEN_ADMIN
 
 usuarios_routes = Blueprint('usuarios', __name__)
@@ -27,7 +27,10 @@ def registro():
             return redirect(url_for('usuarios.registro'))
 
         # Crear usuario en Gitea como admin
-        headers = {"Authorization": f"token {ADMIN_TOKEN}"}
+        headers = {
+            "Authorization": f"token {ADMIN_TOKEN}",
+            "Content-Type": "application/json"
+        }
         data = {
             "email": email,
             "username": username,
@@ -35,6 +38,7 @@ def registro():
             "must_change_password": False,
             "send_notify": False
         }
+
 
         resp = requests.post(f"{GITEA_URL}/admin/users", headers=headers, json=data)
 

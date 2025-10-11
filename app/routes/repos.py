@@ -3,7 +3,7 @@ import base64
 import requests
 from app.func.func import login_required
 
-GITEA_URL = "http://localhost:3000/api/v1"
+GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
 
 repos_routes = Blueprint('repos', __name__)
 
@@ -86,18 +86,15 @@ def comandos(nombre):
     token = session.get('token')
 
     # URL HTTP con token para autenticación automática
-    clone_url = f"http://localhost:3000/{username}/{nombre}.git"
+    clone_url = f"https://freewheeling-variform-arnoldo.ngrok-free.dev/{username}/{nombre}.git"
 
-    comandos_git = f"""# Clonar el repositorio
-git clone {clone_url}
-
-# Entrar al repositorio
-cd {nombre}
-
-# Agregar cambios y subir
+    comandos_git = f"""# subir tu proyecto a tu repositorio "{nombre}"
+git init    
+git remote add origin {clone_url}
+git branch -M main
 git add .
-git commit -m "mensaje"
-git push origin main
+git commit -m "Subida inicial del proyecto"
+git push -u origin main
 """
 
     return render_template('repo_comandos.html', repo_name=nombre, comandos=comandos_git)
