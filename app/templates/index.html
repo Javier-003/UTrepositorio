@@ -3,17 +3,6 @@
     <h1>Bienvenido a Portal UTA</h1>
     <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
 
-    <nav>
-    {% if 'user' in session %}
-        <a href="{{ url_for('repos.repositorios') }}">
-            <button>Crear un nuevo repositorio</button>
-        </a>
-    {% else %}
-    
-    {% endif %}
-    </nav>
-
-
     <h2>Lista de Repositorios</h2>
     {% if repos %}
         <ul>
