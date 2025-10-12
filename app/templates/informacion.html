@@ -1,0 +1,47 @@
+{% extends "base_Home.html" %}
+{% block content %}
+
+
+
+<h2>{{ repo.nombre }}</h2>
+<p>{{ repo.descripcion }}</p>
+<p>{{ repo.categoria }}</p>
+<p>{{ repo.fecha_creacion }}</p>
+<p>{{ repo.framework }}</p>
+<p>{{ repo.lenguaje }}</p>
+<p>{{ repo.integrantes }}</p>
+
+<h3>Archivos multimedia:</h3>
+{% if archivos %}
+    <ul>
+        {% for archivo in archivos %}
+            <li>
+                {# Si es imagen, mostrar <img> #}
+                {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
+                    <img src="{{ archivo.webViewLink}}" 
+                         alt="{{ archivo.nombre }}" 
+                         style="max-width:200px; display:block; margin-top:5px;">
+                
+                {# Si es video, mostrar <video> #}
+                {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
+                    <video controls style="max-width:300px; display:block; margin-top:5px;">
+                        <source src="{{ archivo.webViewLink}}">
+                        Tu navegador no soporta videos.
+                    </video>
+                {% endif %}
+
+                {# Enlace de descarga siempre disponible #}
+                <a href="{{ archivo.webViewLink }}" target="_blank">Descargar archivo</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay archivos para este repositorio.</p>
+{% endif %}
+
+
+
+
+
+
+{% endblock %}
