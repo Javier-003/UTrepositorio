@@ -1,7 +1,9 @@
+from bson import ObjectId
+import dropbox
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, flash
 import base64
 import requests
-from app.func.func import login_required
+from app.func.func import crear_carpeta_dropbox, login_required, procesar_y_subir_multimedia_dropbox
 
 GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
 
@@ -35,25 +37,67 @@ def repositorios():
 @login_required
 def crear():
     db = current_app.get_db_connection()
+
     nombre = request.form.get('nombre')
     descripcion = request.form.get('descripcion')
+    fecha = request.form.get('fecha_creacion')
+    categoria = request.form.get('categoria')
+    framework = request.form.get('framework')
+    lenguaje = request.form.get('lenguaje')
+    integrantes = request.form.getlist('Integrantes[]')
+    multimedia = request.files.getlist('multimedia[]')
+
     username = session['user']
     token = session.get('token')
+    usuario = db['usuarios'].find_one({"username": username})
+    carpeta_usuario = usuario.get('dropbox_folder_path', username)  # Usa carpeta del usuario o su nombre
 
-    if nombre:
-        # Guardar en MongoDB
-        db['repositorios'].insert_one({
-            "nombre": nombre,
-            "descripcion": descripcion,
-            "usuario": username
-        })
+    # ✅ Crear carpeta en Dropbox para este repo
+    carpeta_repo_path, carpeta_repo_link = crear_carpeta_dropbox(nombre, parent_path=carpeta_usuario)
 
-        # Crear repositorio en Gitea
-        headers = {"Authorization": f"token {token}"}
-        data = {"name": nombre, "description": descripcion, "private": False}
-        response = requests.post(f"{GITEA_URL}/user/repos", headers=headers, json=data)
-        print(response.json() if response.content else "Repositorio creado en Gitea")  # debug
+    if not carpeta_repo_path:
+        flash("Error creando carpeta en Dropbox")
+        return redirect(url_for('repos.repositorios'))
 
+    # ✅ Crear repositorio en Gitea
+    headers = {"Authorization": f"token {token}"}
+    data = {"name": nombre, "description": descripcion, "private": False}
+    resp = requests.post(f"{GITEA_URL}/user/repos", headers=headers, json=data)
+    if resp.status_code != 201:
+        flash(f"Error creando repo en Gitea: {resp.text}")
+        return redirect(url_for('repos.repositorios'))
+
+    repo_info = resp.json()
+
+    # ✅ Guardar repo en MongoDB
+    repo_doc = {
+        "nombre": repo_info['name'],
+        "full_name": repo_info['full_name'],
+        "descripcion": repo_info['description'],
+        "usuario": username,
+        "integrantes": integrantes,
+        "fecha_creacion": fecha,
+        "categoria": categoria,
+        "framework": framework,
+        "lenguaje": lenguaje,
+        "dropbox_path": carpeta_repo_path,
+        "dropbox_link": carpeta_repo_link,
+    }
+
+    insert_result = db['repositorios'].insert_one(repo_doc)
+
+    # ✅ Subir multimedia a Dropbox
+    if multimedia:
+        archivos_subidos = procesar_y_subir_multimedia_dropbox(multimedia, carpeta_repo_path)
+        for f in archivos_subidos:
+            db['archivos'].insert_one({
+                "repo_id": insert_result.inserted_id,
+                "nombre": f["nombre"],
+                "dropbox_path": f["path"],
+                "webViewLink": f["webViewLink"]
+            })
+
+    flash("Repositorio y multimedia creados correctamente en Dropbox ✅")
     return redirect(url_for('repos.repositorios'))
 
 # ------------------------------
@@ -66,14 +110,31 @@ def eliminar(nombre):
     username = session['user']
     token = session.get('token')
 
-    # Eliminar de MongoDB solo si pertenece al usuario
+    # Buscar el repositorio para obtener la carpeta de Dropbox
+    repo = db['repositorios'].find_one({"nombre": nombre, "usuario": username})
+    if repo:
+        dropbox_folder_path = repo.get('dropbox_path', f"/user_{username}/{nombre}")
+
+        # Conectar a Dropbox
+        dbx = current_app.dropbox_client  # asumiendo que guardaste el cliente en Flask
+        try:
+            dbx.files_delete_v2(dropbox_folder_path)
+            print(f"Carpeta de Dropbox eliminada: {dropbox_folder_path}")
+        except Exception as e:
+            print(f"Error eliminando carpeta en Dropbox: {e}")
+
+        # Eliminar referencias de archivos asociados
+        db['archivos'].delete_many({"repo_id": repo['_id']})
+
+    # Eliminar repositorio de MongoDB
     db['repositorios'].delete_one({"nombre": nombre, "usuario": username})
 
-    # Eliminar de Gitea
+    # Eliminar repositorio de Gitea
     headers = {"Authorization": f"token {token}"}
     response = requests.delete(f"{GITEA_URL}/repos/{username}/{nombre}", headers=headers)
     print(response.json() if response.content else "Repositorio eliminado en Gitea")  # debug
 
+    flash("Repositorio y archivos asociados eliminados correctamente")
     return redirect(url_for('repos.repositorios'))
 
 # ------------------------------
@@ -146,3 +207,20 @@ def leer_archivo(repo, filepath):
     contenido = base64.b64decode(archivo_info['content']).decode('utf-8', errors='ignore')
 
     return render_template('leer_archivo.html', repo=repo, archivo=filepath, contenido=contenido)
+
+
+# ------------------------------
+# 🔹 VISUALIZAR TODA LA INFORMACION DEL REPOSITORIO (MULTIMEDIA)
+# ------------------------------
+
+@repos_routes.route('/informacion/<nombre>/<repo_id>')
+def informacion_repo(repo_id,nombre):
+    db = current_app.get_db_connection()
+
+    # Buscar el repositorio
+    repo = db['repositorios'].find_one({"_id": ObjectId(repo_id)})
+
+    # Buscar archivos del repo
+    archivos = list(db['archivos'].find({"repo_id": ObjectId(repo_id)}))
+
+    return render_template('informacion.html', repo=repo, archivos=archivos)

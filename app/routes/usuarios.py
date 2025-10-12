@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 import requests
 import time
+import dropbox
 from config import Config
 
 GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
@@ -42,16 +43,47 @@ def registro():
 
         resp = requests.post(f"{GITEA_URL}/admin/users", headers=headers, json=data)
 
+
         if resp.status_code == 201:
-            # Guardar usuario en MongoDB sin contraseña
-            db['usuarios'].insert_one({
+            # Guardar usuario en MongoDB
+            usuario_doc = {
                 "username": username,
                 "email": email
-            })
-            flash("Usuario creado. Ahora inicia sesión para generar tu token.")
+            }
+            db['usuarios'].insert_one(usuario_doc)
+
+            # =========================
+            # Crear carpeta en Dropbox
+            # =========================
+            try:
+                access_token = current_app.config['DROPBOX_ACCESS_TOKEN']
+                dbx = dropbox.Dropbox(access_token)
+
+                carpeta_usuario = f"/user_{username}"
+
+                # Crear carpeta si no existe
+                try:
+                    dbx.files_get_metadata(carpeta_usuario)
+                    print("La carpeta ya existe en Dropbox.")
+                except dropbox.exceptions.ApiError:
+                    dbx.files_create_folder_v2(carpeta_usuario)
+                    print(f"Carpeta creada en Dropbox: {carpeta_usuario}")
+
+                # Guardar referencia de Dropbox en MongoDB
+                db['usuarios'].update_one(
+                    {"username": username},
+                    {"$set": {"dropbox_folder_path": carpeta_usuario}}
+                )
+
+            except Exception as e:
+                flash(f"Usuario creado, pero no se pudo crear carpeta en Dropbox: {e}")
+                print(f"Error Dropbox: {e}")
+
+            flash("Usuario creado correctamente. Ahora inicia sesión para generar tu token.")
             return redirect(url_for('usuarios.login'))
+
         else:
-            flash(f"Error creando usuario: {resp.text}")
+            flash(f"Error creando usuario en Gitea: {resp.text}")
 
     return render_template('registro.html')
 
@@ -94,7 +126,8 @@ def login():
         # Iniciar sesión
         session['user'] = username
         session['token'] = token
-        flash(f"Bienvenido {username}")
+        mensaje = {'texto': f"Bienvenido {username}", 'color': 'green'}
+        flash(mensaje)
         return redirect(url_for('repos.repositorios'))
 
     return render_template('login.html')
