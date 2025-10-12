@@ -3,12 +3,24 @@
 <br>
 
 <nav>
-    <a href="{{ url_for('main.index') }}">
-        <button>Volver al inicio</button>
-    </a>
-    <a href="{{ url_for('repos.repositorios') }}">
-        <button>Volver a mis repositorios</button>
-    </a>
+		{% if 'user' in session %}
+		<a href="{{ url_for('main.index') }}">
+            <button>Volver al inicio</button>
+        </a>
+        <a href="{{ url_for('repos.repositorios') }}">
+            <button>Volver a mis repositorios</button>
+        </a>
+		<a href="{{ url_for('usuarios.logout') }}">
+			<button>Cerrar sesión</button>
+		</a>
+		{% else %}
+		<a href="{{ url_for('usuarios.registro') }}">
+			<button>Crear usuario</button>
+		</a>
+		<a href="{{ url_for('usuarios.login') }}">
+			<button>Iniciar sesión</button>
+		</a>
+		{% endif %}
 </nav>
 
 <h2>{{ repo.nombre }}</h2>
