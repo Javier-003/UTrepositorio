@@ -1,6 +1,19 @@
 {% extends "base_home.html" %}
 {% block content %}
+<br>
 
+<nav>
+    {% if 'user' in session %}
+        <a href="{{ url_for('main.index') }}">
+            <button>Volver al inicio</button>
+        </a>
+        <a href="{{ url_for('repos.repositorios') }}">
+            <button>Volver a mis repositorios</button>
+        </a>
+    {% else %}
+    
+    {% endif %}
+</nav>
 
 
 <h2>{{ repo.nombre }}</h2>

@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PortalUTA{% endblock %}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}PortalUTA{% endblock %}</title>
 </head>
+
 <body>
-    <a href="{{ url_for('main.index') }}" style="font-family: 'Times New Roman', Times, serif; font-size:30px; font-weight: bolder; text-decoration-line: none;">
-            PortalUTA
-        </a>
-    <nav>
-        <a href="{{ url_for('usuarios.registro') }}">
-            <button>Crear usuario</button>
-        </a>
-        <a href="{{ url_for('usuarios.login') }}">
-            <button>Iniciar sesión</button>
-        </a>
-    </nav>
+	<a href="{{ url_for('main.index') }}"
+		style="font-family: 'Times New Roman', Times, serif; font-size:30px; font-weight: bolder; text-decoration-line: none;">
+		PortalUTA
+	</a>
+	<nav>
+		{% if 'user' in session %}
+		<a href="{{ url_for('usuarios.logout') }}">
+			<button>Cerrar sesión</button>
+		</a>
+		{% else %}
+		<a href="{{ url_for('usuarios.registro') }}">
+			<button>Crear usuario</button>
+		</a>
+		<a href="{{ url_for('usuarios.login') }}">
+			<button>Iniciar sesión</button>
+		</a>
+		{% endif %}
+	</nav>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="flash flash-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
 
-    {% block content %}{% endblock %}
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	{% for category, message in messages %}
+	<div class="flash flash-{{ category }}">{{ message }}</div>
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
+
+	{% block content %}{% endblock %}
 
 </body>
+
 </html>
