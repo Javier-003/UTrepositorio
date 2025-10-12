@@ -1,39 +1,39 @@
 {% extends "base_home.html" %}
 {% block content %}
-    <nav>
-		{% if 'user' in session %}
-		<a href="{{ url_for('repos.repositorios') }}">
-            <button>Crear un nuevo repositorio</button>
-        </a>
-		<a href="{{ url_for('usuarios.logout') }}">
-			<button>Cerrar sesión</button>
-		</a>
-		{% else %}
-		<a href="{{ url_for('usuarios.registro') }}">
-			<button>Crear usuario</button>
-		</a>
-		<a href="{{ url_for('usuarios.login') }}">
-			<button>Iniciar sesión</button>
-		</a>
-		{% endif %}
-	</nav>
-
-    <h1>Bienvenido a Portal UTA</h1>
-    <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
-
-    <h2>Lista de Repositorios</h2>
-    {% if repos %}
-        <ul>
-            {% for repo in repos %}
-                <li>
-                    <strong>{{ repo.nombre }}</strong>
-                    <a href="{{ url_for('main.informacion', repo_id=repo._id) }}">
-                        <button>Ver Información</button>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+<nav>
+    {% if 'user' in session %}
+    <a href="{{ url_for('repos.repositorios') }}">
+        <button>Crear un nuevo repositorio</button>
+    </a>
+    <a href="{{ url_for('usuarios.logout') }}">
+        <button>Cerrar sesión</button>
+    </a>
     {% else %}
-        <p>No Existe ningun repositorio aun.</p>
+    <a href="{{ url_for('usuarios.registro') }}">
+        <button>Crear usuario</button>
+    </a>
+    <a href="{{ url_for('usuarios.login') }}">
+        <button>Iniciar sesión</button>
+    </a>
     {% endif %}
+</nav>
+
+<h1>Bienvenido a Portal UTA</h1>
+<p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+
+<h2>Lista de Repositorios</h2>
+{% if repos %}
+<ul>
+    {% for repo in repos %}
+    <li>
+        <strong>{{ repo.nombre }}</strong>
+        <a href="{{ url_for('main.informacion', repo_id=repo._id) }}">
+            <button>Ver Información</button>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Existe ningun repositorio aun.</p>
+{% endif %}
 {% endblock %}
