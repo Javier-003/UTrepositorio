@@ -4,7 +4,7 @@ import uuid
 import dropbox
 from dropbox.files import WriteMode
 from flask import current_app, session, redirect, url_for, flash
-from googleapiclient.http import MediaFileUpload
+#from googleapiclient.http import MediaFileUpload
 DROPBOX_ACCESS_TOKEN = current_app.config['DROPBOX_ACCESS_TOKEN']
 
 dbx = dropbox.Dropbox(DROPBOX_ACCESS_TOKEN)
