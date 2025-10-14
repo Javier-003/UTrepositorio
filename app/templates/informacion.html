@@ -29,7 +29,7 @@
 <p>{{ repo.fecha_creacion }}</p>
 <p>{{ repo.framework }}</p>
 <p>{{ repo.lenguaje }}</p>
-<p>{{ repo.integrantes }}</p>
+<p>{{ repo.integrantes | join(', ') }}</p>
 
 <h3>Archivos multimedia:</h3>
 {% if archivos %}
