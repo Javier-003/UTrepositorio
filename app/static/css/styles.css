@@ -1,0 +1,21 @@
+            .sugerencias {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                background: white;
+                border: 1px solid #ccc;
+                width: 250px;
+                max-height: 150px;
+                overflow-y: auto;
+                z-index: 10;
+            }
+
+            .sugerencias li {
+                padding: 5px;
+                cursor: pointer;
+            }
+
+            .sugerencias li:hover {
+                background: #eee;
+            }

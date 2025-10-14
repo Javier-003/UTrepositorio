@@ -101,37 +101,22 @@
         <div>
             <label>
                 <p>Integrantes (opcional):</p>
-                <div id="integrantes-list">
-                    <input type="text" name="Integrantes[]" placeholder="Nombre del integrante">
+                <div id="integrantes-list" style="position: relative;">
+                    <input type="text" name="Integrantes[]" placeholder="Nombre del integrante" class="integrante-input"
+                        autocomplete="off">
+                    <ul class="sugerencias"></ul>
                 </div>
-                <button type="button" id="add-integrante" style="margin-top:5px;">+</button>
+                <button type="button" id="add-integrante" style="margin-top:5px;">Agregar</button>
                 <button type="button" id="remove-integrante" style="margin-top:5px;">Quitar</button>
             </label>
-            <script>
-                document.getElementById('add-integrante').addEventListener('click', function () {
-                    var div = document.createElement('div');
-                    div.innerHTML = '<input type="text" name="Integrantes[]" placeholder="Nombre del integrante">';
-                    document.getElementById('integrantes-list').appendChild(div);
-                });
-                document.getElementById('remove-integrante').addEventListener('click', function () {
-                    var integrantesList = document.getElementById('integrantes-list');
-                    if (integrantesList.children.length > 1) {
-                        integrantesList.removeChild(integrantesList.lastElementChild);
-                    }
-                });
-            </script>
-
         </div>
-    </div>
-    <div id="otros-fields" style="display:none;">
-        <div>
+        <div id="otros-fields">
             <label>
+                <p>Escribe el objetivo del proyecto:</p>
                 <input type="text" name="objetivo" placeholder="Objetivo del proyecto">
             </label>
         </div>
-
     </div>
-
     <button type="submit">Crear</button>
 </form>
 
@@ -179,4 +164,6 @@
         });
     });
 </script>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}
