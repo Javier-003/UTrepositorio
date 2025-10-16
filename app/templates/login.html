@@ -1,29 +1,36 @@
 {% extends "base_home.html" %}
+{% block body_class %}login-page{% endblock %}
+
 {% block content %}
-<h1>Iniciar Sesión</h1>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul style="color: red;">
-	{% for message in messages %}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+<div class="container">
+	<h1>Iniciar Sesión</h1>
 
-<form method="POST" action="{{ url_for('usuarios.login') }}">
-	<label for="username">Usuario:</label>
-	<input type="text" name="username" id="username" required><br><br>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	<ul style="color: red;">
+		{% for message in messages %}
+		<li>{{ message }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+	{% endwith %}
 
-	<label for="password">Contraseña:</label>
-	<input type="password" name="password" id="password" required><br><br>
 
-	<button type="submit">Iniciar Sesión</button>
-</form>
+	<form method="POST" action="{{ url_for('usuarios.login') }}">
+		<label for="username">Usuario:</label>
+		<input type="text" name="username" id="username" required><br><br>
 
-<p>O registra un nuevo usuario</p>
-<a href="{{ url_for('usuarios.registro') }}">
-	<button>Ir a Registro</button>
-</a>
+		<label for="password">Contraseña:</label>
+		<input type="password" name="password" id="password" required><br><br>
+
+		<button type="submit">Iniciar Sesión</button>
+	</form>
+
+	<p>O registra un nuevo usuario</p>
+	<a href="{{ url_for('usuarios.registro') }}">
+		<button>Ir a Registro</button>
+	</a>
+
+</div>
 {% endblock %}
