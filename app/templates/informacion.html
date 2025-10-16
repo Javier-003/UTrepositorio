@@ -29,29 +29,34 @@
 <p>{{ repo.fecha_creacion }}</p>
 <p>{{ repo.framework }}</p>
 <p>{{ repo.lenguaje }}</p>
-<p>{{ repo.integrantes }}</p>
+<p>Integrantes:</p>
+<ul>
+    {% for integrante in repo.integrantes %}
+        <li>{{ integrante }}</li>
+    {% endfor %}
+</ul>
 
 <h3>Archivos multimedia:</h3>
 {% if archivos %}
 <ul>
     {% for archivo in archivos %}
     <li>
-        {# Si es imagen, mostrar <img> #}
+        {% set enlace_directo = archivo.webViewLink.replace('dl=0', 'raw=1') %}
+        
         {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
-        <img src="{{ archivo.webViewLink}}" alt="{{ archivo.nombre }}"
-            style="max-width:200px; display:block; margin-top:5px;">
-
-        {# Si es video, mostrar <video> #}
-            {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
+            <img src="{{ enlace_directo }}" alt="{{ archivo.nombre }}"
+                style="max-width:200px; display:block; margin-top:5px;">
+        
+        {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
             <video controls style="max-width:300px; display:block; margin-top:5px;">
-                <source src="{{ archivo.webViewLink}}">
+                <source src="{{ enlace_directo }}">
                 Tu navegador no soporta videos.
             </video>
-            {% endif %}
+        {% endif %}
 
-            {# Enlace de descarga siempre disponible #}
-            <a href="{{ archivo.webViewLink }}" target="_blank">Descargar archivo</a>
+        <a href="{{ archivo.webViewLink }}" target="_blank">Descargar archivo</a>
     </li>
+
     {% endfor %}
 </ul>
 {% else %}

@@ -3,8 +3,6 @@ from flask import Flask, g
 from pymongo import MongoClient
 import certifi
 from config import Config
-#from googleapiclient.discovery import build
-#from google.oauth2 import service_account
 
 def create_app():
     app = Flask(__name__)
@@ -43,8 +41,9 @@ def create_app():
         from app.routes.main import main_routes
         from app.routes.repos import repos_routes
         from app.routes.usuarios import usuarios_routes
+        from app.routes.rutas_gitea import gitea_routes
 
-
+        app.register_blueprint(gitea_routes)
         app.register_blueprint(main_routes)
         app.register_blueprint(repos_routes)
         app.register_blueprint(usuarios_routes)
