@@ -4,11 +4,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='repos.css') }}">
 	<title>{% block title %}PortalUTA{% endblock %}</title>
 </head>
 
-<body>
-	<a href="{{ url_for('main.index') }}"
+<body class="{% block body_class %}{% endblock %}">
+	<a id="site-title" href="{{ url_for('main.index') }}"
 		style="font-family: 'Times New Roman', Times, serif; font-size:30px; font-weight: bolder; text-decoration-line: none;">
 		PortalUTA
 	</a>
@@ -23,4 +25,5 @@
 
 	{% block content %}{% endblock %}
 </body>
+
 </html>

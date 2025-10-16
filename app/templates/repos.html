@@ -1,139 +1,167 @@
 {% extends "base_home.html" %}
+{% block body_class %}dashboard-page{% endblock %}
 {% block content %}
-<h1>Mis Repositorios</h1>
 
-<p>Bienvenido, {{ session.get('user') }}!</p>
-<a href="{{ url_for('main.index') }}"><button>Volver al Inicio</button></a>
-<a href="{{ url_for('usuarios.logout') }}"><button>Cerrar sesión</button></a>
+<div class="dashboard">
 
-<h2>Lista de Repositorios</h2>
-{% if repos %}
-<ul>
-    {% for repo in repos %}
-    <li>
-        <strong>{{ repo.nombre }}</strong> - {{ repo.descripcion }}
-        <a href="{{ url_for('repos.comandos', nombre=repo.nombre) }}">
-            <button>Ver comandos</button>
-        </a>
-        <a href="{{ url_for('repos.explorar_archivos', nombre=repo.nombre) }}">
-            <button>Explorar archivos</button>
-        </a>
-        <a href="{{ url_for('repos.informacion_repo',nombre=repo.nombre,repo_id=repo._id) }}">
-            <button>Ver Información</button>
-        </a>
-        <form method="POST" action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}" style="display:inline;">
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No tienes repositorios aún.</p>
-{% endif %}
-
-<h2>Crear nuevo repositorio</h2>
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul>
-    {% for msg in messages %}
-    <li style="color: {{ msg.color }}">{{ msg.texto }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
-
-<form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
-
-    <div>
-        <label>
-            <p>Nombre del proyecto</p>
-        </label>
-        <label>
-            <input type="text" name="nombre" placeholder="Nombre" required>
-        </label>
-    </div>
-    <div>
-        <label>Fecha de creación</label>
-        <input type="date" required name="fecha_creacion" max="{{ current_date }}">
-    </div>
-    <script>
-        // Si no usas Jinja para current_date, puedes hacerlo en JS:
-        document.addEventListener('DOMContentLoaded', function () {
-            var today = new Date().toISOString().split('T')[0];
-            document.querySelector('input[name="fecha_creacion"]').setAttribute('max', today);
-        });
-    </script>
-    <div>
-        <label>
-            <p>Categoria</p>
-        </label>
-        <label>
-            <input type="radio" name="categoria" value="Aplicación web" required> Aplicacion web
-            <input type="radio" name="categoria" value="aplicación movil"> Aplicacion Movil
-            <input type="radio" name="categoria" value="Emprendimiento"> Emprendimiento
-            <input type="radio" name="categoria" value="Innovación"> Innovación
-        </label>
-
-    </div>
-    <div id="web-movil-fields" style="display:none;">
-        <div>
-            <label>
-                <input type="text" name="framework" placeholder="Framework utilizado" required>
-            </label>
+    <aside class="sidebar">
+        <!-- LOGO -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" />
+            <h2>PortalUTA</h2>
         </div>
-        <div>
-            <label>
-                <input type="text" name="lenguaje" placeholder="Lenguaje principal" required>
-            </label>
-        </div>
-        <div>
-            <label>
-                <input type="text" name="descripcion" placeholder="descripción general del proyecto" required>
-            </label>
-        </div>
-        <div>
-            <label>
-                <p>Selecciona multimedia (solo imágenes JPG/PNG y videos MP4):</p>
-                <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
-            </label>
-            <div id="preview" style="margin-top:10px;"></div>
-        </div>
-        <div>
-            <label>
-                <p>Integrantes (opcional):</p>
-                <div id="integrantes-list">
-                    <input type="text" name="Integrantes[]" placeholder="Nombre del integrante">
+
+        <nav class="menu">
+            <a href="{{ url_for('main.index') }}">Inicio</a>
+            <a href="{{ url_for('usuarios.logout') }}">Cerrar sesión</a>
+        </nav>
+    </aside>
+
+    <div class="main-container">
+
+        <h1>Mis Repositorios</h1>
+
+        <p>Bienvenido, {{ session.get('user') }}!</p>
+
+        <h2>Lista de Repositorios</h2>
+        {% if repos %}
+        <ul class="repo-list">
+            {% for repo in repos %}
+            <li class="repo-item">
+
+                <div class="repo-info">
+                    <strong>{{ repo.nombre }}</strong><br>
+                    {{ repo.descripcion }}
                 </div>
-                <button type="button" id="add-integrante" style="margin-top:5px;">+</button>
-                <button type="button" id="remove-integrante" style="margin-top:5px;">Quitar</button>
-            </label>
+
+                <div class="repo-buttons">
+                    <a href="{{ url_for('repos.comandos', nombre=repo.nombre) }}" class="btn">Ver comandos</a>
+                    <a href="{{ url_for('repos.explorar_archivos', nombre=repo.nombre) }}" class="btn">Explorar
+                        archivos</a>
+                    <a href="{{ url_for('repos.informacion_repo',nombre=repo.nombre,repo_id=repo._id) }}"
+                        class="btn">Ver Información</a>
+
+                    <form method="POST" action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}">
+                        <button type="submit" class="btn delete">Eliminar</button>
+                    </form>
+                </div>
+
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% else %}
+        <p>No tienes repositorios aún.</p>
+        {% endif %}
+
+        <h2>Crear nuevo repositorio</h2>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for msg in messages %}
+            <li style="color:  {{ msg.color }}">{{ msg.texto }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Formulario-->
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
+
+            <div>
+                <label>
+                    <p>Nombre del proyecto</p>
+                </label>
+                <label>
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                </label>
+            </div>
+            <div>
+                <label>Fecha de creación</label>
+                <input type="date" required name="fecha_creacion" max="{{ current_date }}">
+            </div>
             <script>
-                document.getElementById('add-integrante').addEventListener('click', function () {
-                    var div = document.createElement('div');
-                    div.innerHTML = '<input type="text" name="Integrantes[]" placeholder="Nombre del integrante">';
-                    document.getElementById('integrantes-list').appendChild(div);
-                });
-                document.getElementById('remove-integrante').addEventListener('click', function () {
-                    var integrantesList = document.getElementById('integrantes-list');
-                    if (integrantesList.children.length > 1) {
-                        integrantesList.removeChild(integrantesList.lastElementChild);
-                    }
+                document.addEventListener('DOMContentLoaded', function () {
+                    var today = new Date().toISOString().split('T')[0];
+                    document
+                        .querySelector('input[name="fecha_creacion"]')
+                        .setAttribute('max', today);
                 });
             </script>
+            <div>
+                <label>
+                    <p>Categoria</p>
+                </label>
+                <label>
+                    <input type="radio" name="categoria" value="Aplicación web" required> Aplicacion web
+                    <input type="radio" name="categoria" value="aplicación movil"> Aplicacion Movil
+                    <input type="radio" name="categoria" value="Emprendimiento"> Emprendimiento
+                    <input type="radio" name="categoria" value="Innovación"> Innovación
+                </label>
+            </div>
 
-        </div>
+            <div id="web-movil-fields" style="display:none;">
+                <div>
+                    <label>
+                        <input type="text" name="framework" placeholder="Framework utilizado" required>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="text" name="lenguaje" placeholder="Lenguaje principal" required>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="text" name="descripcion" placeholder="descripción general del proyecto" required>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <p>Selecciona multimedia (solo imágenes JPG/PNG y videos MP4):</p>
+                        <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
+                    </label>
+                    <div id="preview" style="margin-top:10px;"></div>
+                </div>
+                <div>
+                    <label>
+                        <p>Integrantes (opcional):</p>
+                        <div id="integrantes-list">
+                            <input type="text" name="Integrantes[]" placeholder="Nombre del integrante">
+                        </div>
+                        <button type="button" id="add-integrante" style="margin-top:5px;">+</button>
+                        <button type="button" id="remove-integrante" style="margin-top:5px;">Quitar</button>
+                    </label>
+                    <script>
+                        document.getElementById('add-integrante').addEventListener('click', function () {
+                            var div = document.createElement('div');
+                            div.innerHTML = '<input type="text" name="Integrantes[]" placeholder="Nombre del integrante">';
+                            document.getElementById('integrantes-list').appendChild(div);
+                        });
+                        document.getElementById('remove-integrante').addEventListener('click', function () {
+                            var integrantesList = document.getElementById('integrantes-list');
+                            if (integrantesList.children.length > 1) {
+                                integrantesList.removeChild(integrantesList.lastElementChild);
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <div id="otros-fields" style="display:none;">
+                <div>
+                    <label>
+                        <input type="text" name="objetivo" placeholder="Objetivo del proyecto">
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit">Crear</button>
+        </form>
+        <!-- Fin del formulario-->
     </div>
-    <div id="otros-fields" style="display:none;">
-        <div>
-            <label>
-                <input type="text" name="objetivo" placeholder="Objetivo del proyecto">
-            </label>
-        </div>
 
-    </div>
-
-    <button type="submit">Crear</button>
-</form>
+</div>
 
 <script>
     document.querySelectorAll('input[name="categoria"]').forEach(function (radio) {
@@ -179,4 +207,5 @@
         });
     });
 </script>
+
 {% endblock %}
