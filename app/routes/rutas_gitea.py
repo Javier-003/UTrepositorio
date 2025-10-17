@@ -4,7 +4,8 @@ from config import Config
 
 gitea_routes = Blueprint('gitea', __name__)
 
-GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
+GITEA_URL = "http://216.238.83.143:3000/api/v1"
+
 ADMIN_TOKEN = Config.GITEA_TOKEN_ADMIN 
 
 @gitea_routes.route("/api/buscar_usuario", methods=["GET"])
