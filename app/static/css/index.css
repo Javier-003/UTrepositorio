@@ -1,0 +1,167 @@
+
+body.index-page {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #dfdddd;
+}
+
+/* ====== LAYOUT GENERAL ====== */
+body.index-page .dashboard {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* ====== SIDEBAR ====== */
+body.index-page .sidebar {
+    width: 250px;
+    background: #93C5FD;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* LOGO*/
+body.index-page .sidebar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+body.index-page .sidebar .logo img {
+    max-width: 100%;
+    height: 60px;
+    object-fit: contain;
+}
+
+body.index-page .sidebar .logo h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Menú */
+body.index-page .menu {
+    display: flex;
+    flex-direction: column;
+}
+
+body.index-page .menu a {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background 0.3s;
+}
+
+body.index-page .menu a:hover {
+    background: #34495e;
+}
+
+/* ====== CONTENIDO PRINCIPAL ====== */
+body.index-page .main-content,
+body.index-page .main-container {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+body.index-page .main-content h1,
+body.index-page .main-content h2,
+body.index-page .main-container h1,
+body.index-page .main-container h2 {
+    margin-top: 0;
+}
+
+/* ====== TARJETAS DE REPOSITORIOS ====== */
+body.index-page .repo-list {
+    list-style: none;
+    padding: 0;
+}
+
+body.index-page .repo-item {
+    background: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body.index-page .repo-item strong {
+    font-size: 18px;
+}
+
+body.index-page .repo-buttons button {
+    margin-left: 5px;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ====== FORMULARIO ====== */
+body.index-page form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+body.index-page form div {
+    margin-bottom: 15px;
+}
+
+body.index-page input[type="text"],
+body.index-page input[type="date"],
+body.index-page input[type="file"],
+body.index-page textarea,
+body.index-page select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+body.index-page form button[type="submit"] {
+    background: #3498db;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+body.index-page form button[type="submit"]:hover {
+    background: #2980b9;
+}
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 768px) {
+    body.index-page .dashboard {
+        flex-direction: column;
+    }
+
+    body.index-page .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    body.index-page .menu {
+        flex-direction: row;
+    }
+
+    body.index-page .menu a {
+        margin: 0 5px;
+    }
+}

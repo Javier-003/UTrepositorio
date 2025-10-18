@@ -4,7 +4,7 @@ import time
 import dropbox
 from config import Config
 
-GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
+GITEA_URL = "http://216.238.83.143:3000/api/v1"
 ADMIN_TOKEN = Config.GITEA_TOKEN_ADMIN
 
 usuarios_routes = Blueprint('usuarios', __name__)

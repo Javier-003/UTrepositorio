@@ -5,7 +5,7 @@ import base64
 import requests
 from app.func.func import crear_carpeta_dropbox, login_required, procesar_y_subir_multimedia_dropbox
 
-GITEA_URL = "https://freewheeling-variform-arnoldo.ngrok-free.dev/api/v1"
+GITEA_URL = "http://216.238.83.143:3000/api/v1"
 
 repos_routes = Blueprint('repos', __name__)
 

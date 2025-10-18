@@ -3,7 +3,7 @@ body.dashboard-page {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: #dfdddd;
+    background: #F5F5F5;
 }
 
 /* ====== LAYOUT GENERAL ====== */
@@ -16,7 +16,7 @@ body.dashboard-page .dashboard {
 /* ====== SIDEBAR ====== */
 body.dashboard-page .sidebar {
     width: 250px;
-    background: #2c3e50;
+    background: #93C5FD;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -26,20 +26,15 @@ body.dashboard-page .sidebar {
 /* LOGO dentro del sidebar */
 body.dashboard-page .sidebar .logo {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 2px;
 }
 
 body.dashboard-page .sidebar .logo img {
     max-width: 100%;
-    height: 60px;
+    height: 150px;
     object-fit: contain;
 }
 
-body.dashboard-page .sidebar .logo h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-}
 
 /* Menú */
 body.dashboard-page .menu {
@@ -48,8 +43,9 @@ body.dashboard-page .menu {
 }
 
 body.dashboard-page .menu a {
-    color: #ecf0f1;
+    color: #FFFFFF;
     text-decoration: none;
+    font-weight: 400;
     padding: 12px;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -75,6 +71,10 @@ body.dashboard-page .main-container h2 {
     margin-top: 0;
 }
 
+body.dashboard-page .main-container h1{
+    color: #2D2D2D;
+}
+
 /* ====== TARJETAS DE REPOSITORIOS ====== */
 body.dashboard-page .repo-list {
     list-style: none;
@@ -86,7 +86,7 @@ body.dashboard-page .repo-item {
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -96,12 +96,54 @@ body.dashboard-page .repo-item strong {
     font-size: 18px;
 }
 
+/* ========== NUEVO ESTILO PROFESIONAL PARA BOTONES ========== */
+
+/* Contenedor de botones */
+body.dashboard-page .repo-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Quitar margen del form */
+body.dashboard-page .repo-buttons form {
+    margin: 0;
+}
+
+/* Estilo base para todos los botones / enlaces */
+body.dashboard-page .btn,
 body.dashboard-page .repo-buttons button {
-    margin-left: 5px;
-    padding: 7px 12px;
+    display: inline-block;
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    text-decoration: none;
+    color: white;
+    background: #3498db;
+    /* color por defecto (azul) */
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover general */
+body.dashboard-page .btn:hover,
+body.dashboard-page .repo-buttons button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Botón Eliminar (rojo) */
+body.dashboard-page .btn.delete,
+body.dashboard-page .repo-buttons button.delete {
+    background: #e74c3c;
+}
+
+body.dashboard-page .btn.delete:hover,
+body.dashboard-page .repo-buttons button.delete:hover {
+    background: #c0392b;
 }
 
 /* ====== FORMULARIO ====== */
@@ -109,7 +151,7 @@ body.dashboard-page form {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
 }
 
@@ -163,5 +205,14 @@ body.dashboard-page form button[type="submit"]:hover {
 
     body.dashboard-page .menu a {
         margin: 0 5px;
+    }
+
+    body.dashboard-page .repo-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    body.dashboard-page .repo-buttons {
+        margin-top: 10px;
     }
 }

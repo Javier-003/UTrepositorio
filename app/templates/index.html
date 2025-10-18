@@ -1,39 +1,60 @@
 {% extends "base_home.html" %}
+{% block body_class %}index-page{% endblock %}
 {% block content %}
-<nav>
+
+<div class="dashboard">
+
     {% if 'user' in session %}
-    <a href="{{ url_for('repos.repositorios') }}">
-        <button>Crear un nuevo repositorio</button>
-    </a>
-    <a href="{{ url_for('usuarios.logout') }}">
-        <button>Cerrar sesión</button>
-    </a>
-    {% else %}
-    <a href="{{ url_for('usuarios.registro') }}">
-        <button>Crear usuario</button>
-    </a>
-    <a href="{{ url_for('usuarios.login') }}">
-        <button>Iniciar sesión</button>
-    </a>
+    <!-- SIDEBAR (igual que dashboard) -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+        </div>
+
+        <nav class="menu">
+            <a href="{{ url_for('repos.repositorios') }}">Mis Repositorios</a>
+            <a href="{{ url_for('usuarios.logout') }}" class="logout">Cerrar sesión</a>
+        </nav>
+    </aside>
     {% endif %}
-</nav>
 
-<h1>Bienvenido a Portal UTA</h1>
-<p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-container">
 
-<h2>Lista de Repositorios</h2>
-{% if repos %}
-<ul>
-    {% for repo in repos %}
-    <li>
-        <strong>{{ repo.nombre }}</strong>
-        <a href="{{ url_for('main.informacion', repo_id=repo._id) }}">
-            <button>Ver Información</button>
-        </a>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No Existe ningun repositorio aun.</p>
-{% endif %}
+        <h1>Bienvenido a Portal UTA</h1>
+        <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="actions">
+            {% if 'user' in session %}
+            <a href="{{ url_for('repos.repositorios') }}" class="btn primary">Crear nuevo repositorio</a>
+            {% else %}
+            <a href="{{ url_for('usuarios.registro') }}" class="btn primary">Crear usuario</a>
+            <a href="{{ url_for('usuarios.login') }}" class="btn secondary">Iniciar sesión</a>
+            {% endif %}
+        </div>
+
+        <!-- LISTA DE REPOSITORIOS -->
+        <h2>Lista de Repositorios</h2>
+        {% if repos %}
+        <ul class="repo-list">
+            {% for repo in repos %}
+            <li class="repo-item">
+                <div class="repo-info">
+                    <strong>{{ repo.nombre }}</strong>
+                </div>
+                <div class="repo-buttons">
+                    <a href="{{ url_for('main.informacion', repo_id=repo._id) }}" class="btn small">Ver Información</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No existe ningún repositorio aún.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
 {% endblock %}
