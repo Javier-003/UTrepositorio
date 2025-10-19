@@ -7,8 +7,7 @@
     <aside class="sidebar">
         <!-- LOGO -->
         <div class="logo">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" />
-            <h2>PortalUTA</h2>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
 
         <nav class="menu">
@@ -55,15 +54,7 @@
         {% endif %}
 
         <h2>Crear nuevo repositorio</h2>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for msg in messages %}
-            <li style="color:  {{ msg.color }}">{{ msg.texto }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
+        
 
         <!-- Formulario-->
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
@@ -163,54 +154,52 @@
 
 </div>
 
-        </div>
-        <button type="submit">Crear</button>
-    </form>
 
-    <script>
-        document.querySelectorAll('input[name="categoria"]').forEach(function (radio) {
-            radio.addEventListener('change', function () {
-                var webMovil = document.getElementById('web-movil-fields');
-                var otros = document.getElementById('otros-fields');
-                if (this.value === 'Aplicación web' || this.value === 'aplicación movil') {
-                    webMovil.style.display = 'block';
-                    otros.style.display = 'none';
-                } else {
-                    webMovil.style.display = 'none';
-                    otros.style.display = 'block';
+
+<script>
+    document.querySelectorAll('input[name="categoria"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            var webMovil = document.getElementById('web-movil-fields');
+            var otros = document.getElementById('otros-fields');
+            if (this.value === 'Aplicación web' || this.value === 'aplicación movil') {
+                webMovil.style.display = 'block';
+                otros.style.display = 'none';
+            } else {
+                webMovil.style.display = 'none';
+                otros.style.display = 'block';
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('multimedia-input').addEventListener('change', function (event) {
+        const preview = document.getElementById('preview');
+        preview.innerHTML = '';
+        Array.from(event.target.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '150px';
+                    img.style.maxHeight = '150px';
+                    img.style.margin = '5px';
+                    preview.appendChild(img);
+                } else if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.src = e.target.result;
+                    video.controls = true;
+                    video.style.maxWidth = '150px';
+                    video.style.maxHeight = '150px';
+                    video.style.margin = '5px';
+                    preview.appendChild(video);
                 }
-            });
+            };
+            reader.readAsDataURL(file);
         });
-    </script>
-
-    <script>
-        document.getElementById('multimedia-input').addEventListener('change', function (event) {
-            const preview = document.getElementById('preview');
-            preview.innerHTML = '';
-            Array.from(event.target.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    if (file.type.startsWith('image/')) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.style.maxWidth = '150px';
-                        img.style.maxHeight = '150px';
-                        img.style.margin = '5px';
-                        preview.appendChild(img);
-                    } else if (file.type.startsWith('video/')) {
-                        const video = document.createElement('video');
-                        video.src = e.target.result;
-                        video.controls = true;
-                        video.style.maxWidth = '150px';
-                        video.style.maxHeight = '150px';
-                        video.style.margin = '5px';
-                        preview.appendChild(video);
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    </script>
+    });
+</script>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}

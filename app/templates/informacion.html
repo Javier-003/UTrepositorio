@@ -1,65 +1,84 @@
 {% extends "base_home.html" %}
+{% block body_class %}dashboard-information{% endblock %}
 {% block content %}
-<br>
 
-<nav>
-    {% if 'user' in session %}
-    <a href="{{ url_for('main.index') }}">
-        <button>Volver al inicio</button>
-    </a>
-    <a href="{{ url_for('repos.repositorios') }}">
-        <button>Volver a mis repositorios</button>
-    </a>
-    <a href="{{ url_for('usuarios.logout') }}">
-        <button>Cerrar sesión</button>
-    </a>
-    {% else %}
-    <a href="{{ url_for('usuarios.registro') }}">
-        <button>Crear usuario</button>
-    </a>
-    <a href="{{ url_for('usuarios.login') }}">
-        <button>Iniciar sesión</button>
-    </a>
-    {% endif %}
-</nav>
+<div class="dashboard">
 
-<h2>{{ repo.nombre }}</h2>
-<p>{{ repo.descripcion }}</p>
-<p>{{ repo.categoria }}</p>
-<p>{{ repo.fecha_creacion }}</p>
-<p>{{ repo.framework }}</p>
-<p>{{ repo.lenguaje }}</p>
-<p>Integrantes:</p>
-<ul>
-    {% for integrante in repo.integrantes %}
-        <li>{{ integrante }}</li>
-    {% endfor %}
-</ul>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </div>
 
-<h3>Archivos multimedia:</h3>
-{% if archivos %}
-<ul>
-    {% for archivo in archivos %}
-    <li>
-        {% set enlace_directo = archivo.webViewLink.replace('dl=0', 'raw=1') %}
-        
-        {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
-            <img src="{{ enlace_directo }}" alt="{{ archivo.nombre }}"
-                style="max-width:200px; display:block; margin-top:5px;">
-        
-        {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
-            <video controls style="max-width:300px; display:block; margin-top:5px;">
-                <source src="{{ enlace_directo }}">
-                Tu navegador no soporta videos.
-            </video>
+        <nav class="menu">
+            {% if 'user' in session %}
+            <a href="{{ url_for('main.index') }}">Volver al inicio</a>
+            <a href="{{ url_for('repos.repositorios') }}">Mis repositorios</a>
+            <a href="{{ url_for('usuarios.logout') }}">Cerrar sesión</a>
+            {% else %}
+            <a href="{{ url_for('usuarios.registro') }}">Crear usuario</a>
+            <a href="{{ url_for('usuarios.login') }}">Iniciar sesión</a>
+            {% endif %}
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-container">
+
+        <!-- ETIQUETA / TÍTULO PRINCIPAL -->
+        <h1>Información del Repositorio</h1>
+
+        <h2>{{ repo.nombre }}</h2>
+        <p><strong>Descripción:</strong> {{ repo.descripcion }}</p>
+        <p><strong>Categoría:</strong> {{ repo.categoria }}</p>
+        <p><strong>Fecha de creación:</strong> {{ repo.fecha_creacion }}</p>
+
+        {% if repo.framework %}
+        <p><strong>Framework:</strong> {{ repo.framework }}</p>
         {% endif %}
 
-        <a href="{{ archivo.webViewLink }}" target="_blank">Descargar archivo</a>
-    </li>
+        {% if repo.lenguaje %}
+        <p><strong>Lenguaje:</strong> {{ repo.lenguaje }}</p>
+        {% endif %}
 
-    {% endfor %}
-</ul>
-{% else %}
-<p>No hay archivos para este repositorio.</p>
-{% endif %}
+        <h3>Integrantes:</h3>
+        {% if repo.integrantes %}
+        <ul>
+            {% for integrante in repo.integrantes %}
+            <li>{{ integrante }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay integrantes registrados.</p>
+        {% endif %}
+
+        <h3>Archivos multimedia:</h3>
+        {% if archivos %}
+        <ul>
+            {% for archivo in archivos %}
+            <li>
+                {% set enlace_directo = archivo.webViewLink.replace('dl=0', 'raw=1') %}
+
+                {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
+                <img src="{{ enlace_directo }}" alt="{{ archivo.nombre }}"
+                    style="max-width:200px; display:block; margin-top:5px;">
+                {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
+                <video controls style="max-width:300px; display:block; margin-top:5px;">
+                    <source src="{{ enlace_directo }}">
+                    Tu navegador no soporta videos.
+                </video>
+                {% endif %}
+
+                <a href="{{ archivo.webViewLink }}" target="_blank">Descargar archivo</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay archivos para este repositorio.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
 {% endblock %}

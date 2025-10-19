@@ -63,7 +63,7 @@ input[type="password"] {
 button {
     width: 100%;
     padding: 0.9rem;
-    background: #007BFF;
+    background: #3498db;
     color: white;
     border: none;
     border-radius: 5px;
@@ -73,7 +73,7 @@ button {
 }
 
 button:hover {
-    background: #0056b3;
+    background: #2980b9;
 }
 
 /* Enlace de registro */
@@ -84,11 +84,11 @@ p {
 
 a button {
     margin-top: 0.5rem;
-    background: #28a745;
+    background: #16A085;
 }
 
 a button:hover {
-    background: #1e7e34;
+    background: #138D75;
 }
 
 /* Mensajes de error */
