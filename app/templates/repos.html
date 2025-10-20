@@ -11,10 +11,26 @@
         </div>
 
         <nav class="menu">
-            <a href="{{ url_for('main.index') }}">Inicio</a>
-            <a href="{{ url_for('usuarios.logout') }}">Cerrar sesión</a>
+            <a href="{{ url_for('main.index') }}">
+                <!-- Icono de casa (Inicio) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                        d="M8 3.293l6 6V15h-4v-4H6v4H2V9.293l6-6zM7.5 1.5L1 8h2v7h4V10h2v5h4V8h2L8.5 1.5a.5.5 0 0 0-.707 0z" />
+                </svg>
+                Inicio
+            </a>
+            <a href="{{ url_for('usuarios.logout') }}">
+                <!-- Icono de puerta/salida (Cerrar sesión) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
+                    <path
+                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                </svg>
+                Cerrar sesión
+            </a>
         </nav>
     </aside>
+
 
     <div class="main-container">
 
@@ -54,7 +70,7 @@
         {% endif %}
 
         <h2>Crear nuevo repositorio</h2>
-        
+
 
         <!-- Formulario-->
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">

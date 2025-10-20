@@ -1,6 +1,49 @@
 {% extends "base_home.html" %}
+{% block body_class %}comandos-page{% endblock %}
 {% block content %}
-<h1>Comandos Git para {{ repo_name }}</h1>
-<pre>{{ comandos }}</pre>
-<a href="{{ url_for('repos.repositorios') }}"><button>Volver a mis repositorios</button></a>
+
+<div class="dashboard">
+
+    {% if 'user' in session %}
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+        </div>
+
+        <nav class="menu">
+            <a href="{{ url_for('repos.repositorios') }}">
+                <!-- Icono carpeta -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M2 2h4l2 2h6v10H2V2z" />
+                </svg>
+                Mis Repositorios
+            </a>
+            <a href="{{ url_for('usuarios.logout') }}" class="logout">
+                <!-- Icono logout -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
+                    <path
+                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </aside>
+    {% endif %}
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-container">
+
+        <h1>Comandos Git para {{ repo_name }}</h1>
+
+        <!-- LISTA DE COMANDOS -->
+        <div class="commands">
+            <pre>{{ comandos }}</pre>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}
