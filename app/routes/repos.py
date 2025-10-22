@@ -3,7 +3,7 @@ import dropbox
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, flash
 import base64
 import requests
-from app.func.func import crear_carpeta_dropbox, login_required, procesar_y_subir_multimedia_dropbox
+from app.func.func import crear_carpeta_dropbox, login_required, procesar_y_subir_multimedia_dropbox, roles_required
 
 GITEA_URL = "http://216.238.83.143:3000/api/v1"
 
@@ -17,11 +17,10 @@ def obtener_token_usuario():
         return None
     return token
 
-# ------------------------------
-# 🔹 LISTAR REPOSITORIOS
-# ------------------------------
+# Listar repositorios
 @repos_routes.route('/repositorios/')
 @login_required
+@roles_required('usuario', 'admin')
 def repositorios():
     db = current_app.get_db_connection()
     username = session['user']
@@ -30,11 +29,10 @@ def repositorios():
     repos = list(db['repositorios'].find({"usuario": username}))
     return render_template('repos.html', repos=repos)
 
-# ------------------------------
-# 🔹 CREAR REPOSITORIO
-# ------------------------------
+# Crear repositorios
 @repos_routes.route('/crear', methods=['POST'])
 @login_required
+@roles_required('usuario', 'admin')
 def crear():
     db = current_app.get_db_connection()
 
@@ -52,14 +50,14 @@ def crear():
     usuario = db['usuarios'].find_one({"username": username})
     carpeta_usuario = usuario.get('dropbox_folder_path', username)  # Usa carpeta del usuario o su nombre
 
-    # ✅ Crear carpeta en Dropbox para este repo
+    # Crear carpeta en Dropbox para este repo
     carpeta_repo_path, carpeta_repo_link = crear_carpeta_dropbox(nombre, parent_path=carpeta_usuario)
 
     if not carpeta_repo_path:
         flash("Error creando carpeta en Dropbox")
         return redirect(url_for('repos.repositorios'))
 
-    # ✅ Crear repositorio en Gitea
+    # Crear repositorio en Gitea
     headers = {"Authorization": f"token {token}"}
     data = {"name": nombre, "description": descripcion, "private": False}
     resp = requests.post(f"{GITEA_URL}/user/repos", headers=headers, json=data)
@@ -69,7 +67,7 @@ def crear():
 
     repo_info = resp.json()
 
-    # ✅ Guardar repo en MongoDB
+    # Guardar repo en MongoDB
     repo_doc = {
         "nombre": repo_info['name'],
         "full_name": repo_info['full_name'],
@@ -86,7 +84,7 @@ def crear():
 
     insert_result = db['repositorios'].insert_one(repo_doc)
 
-    # ✅ Subir multimedia a Dropbox
+    # Subir multimedia a Dropbox
     if multimedia:
         archivos_subidos = procesar_y_subir_multimedia_dropbox(multimedia, carpeta_repo_path)
         for f in archivos_subidos:
@@ -100,11 +98,10 @@ def crear():
     flash("Repositorio y multimedia creados correctamente en Dropbox ✅")
     return redirect(url_for('repos.repositorios'))
 
-# ------------------------------
-# 🔹 ELIMINAR REPOSITORIO
-# ------------------------------
+# Eliminar repositorios
 @repos_routes.route('/repositorios/eliminar/<nombre>', methods=['POST'])
 @login_required
+@roles_required('admin')
 def eliminar(nombre):
     db = current_app.get_db_connection()
     username = session['user']
@@ -137,11 +134,10 @@ def eliminar(nombre):
     flash("Repositorio y archivos asociados eliminados correctamente")
     return redirect(url_for('repos.repositorios'))
 
-# ------------------------------
-# 🔹 VER COMANDOS DE UN REPOSITORIO
-# ------------------------------
+# Ver comandos de un repositorio
 @repos_routes.route('/repositorios/<nombre>')
 @login_required
+@roles_required('usuario', 'admin')
 def comandos(nombre):
     username = session['user']
     token = session.get('token')
@@ -161,12 +157,11 @@ git push -u origin main
     return render_template('repo_comandos.html', repo_name=nombre, comandos=comandos_git)
 
 
-# ------------------------------
-# 🔹 EXPLORAR ARCHIVOS / CARPETAS
-# ------------------------------
+# Explorar archivos y carpetas
 @repos_routes.route('/repositorios/<nombre>/archivos/', defaults={'path': ''})
 @repos_routes.route('/repositorios/<nombre>/archivos/<path:path>')
 @login_required
+@roles_required('usuario', 'admin')
 def explorar_archivos(nombre, path):
     username = session['user']
     token = session.get('token')
@@ -187,11 +182,10 @@ def explorar_archivos(nombre, path):
     return render_template('archivos.html', repo=nombre, archivos=archivos, path=path)
 
 
-# ------------------------------
-# 🔹 LEER ARCHIVO DE TEXTO
-# ------------------------------
+# Leer archivo de texto
 @repos_routes.route('/repositorios/<repo>/archivo/<path:filepath>')
 @login_required
+@roles_required('usuario', 'admin')
 def leer_archivo(repo, filepath):
     username = session['user']
     token = session.get('token')
@@ -209,11 +203,10 @@ def leer_archivo(repo, filepath):
     return render_template('leer_archivo.html', repo=repo, archivo=filepath, contenido=contenido)
 
 
-# ------------------------------
-# 🔹 VISUALIZAR TODA LA INFORMACION DEL REPOSITORIO (MULTIMEDIA)
-# ------------------------------
-
+# Visualizar todo archivo multimedia
 @repos_routes.route('/informacion/<nombre>/<repo_id>')
+@login_required
+@roles_required('usuario', 'admin')
 def informacion_repo(repo_id,nombre):
     db = current_app.get_db_connection()
 

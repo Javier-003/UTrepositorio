@@ -16,6 +16,7 @@ def registro():
         username = request.form['username'].strip()
         email = request.form['email'].strip()
         password = request.form['password'].strip()
+        role = request.form['roles'].strip()
 
         if not username or not email or not password:
             flash("Todos los campos son obligatorios.")
@@ -48,7 +49,8 @@ def registro():
             # Guardar usuario en MongoDB
             usuario_doc = {
                 "username": username,
-                "email": email
+                "email": email,
+                "role": role
             }
             db['usuarios'].insert_one(usuario_doc)
 
@@ -124,8 +126,12 @@ def login():
         )
 
         # Iniciar sesión
-        session['user'] = username
-        session['token'] = token
+        session['user'] = {
+            "username": user['username'],
+            "role": user.get('role'),
+            "token": token
+        }
+        
         mensaje = {'texto': f"Bienvenido {username}", 'color': 'green'}
         flash(mensaje)
         return redirect(url_for('repos.repositorios'))
