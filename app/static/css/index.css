@@ -1,0 +1,264 @@
+
+/* Importar fuente moderna (Poppins) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Variables de color para fácil mantenimiento */
+:root {
+    --color-primary: #4B6A9B;   /* Azul grisáceo */
+    --color-accent: #93C5FD;    /* Celeste */
+    --color-dark: #2D2D2D;      /* Gris oscuro (texto) */
+    --color-light: #FFFFFF;     /* Blanco */
+    --color-bg: #F5F5F5;        /* Fondo general */
+    --color-delete: #E57373;    /* Rojo suave eliminar */
+    --color-delete-hover: #D9534F;
+}
+
+
+body.index-page {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-dark);
+    display: flex;
+    min-height: 100vh;
+}
+
+
+
+.dashboard {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* SIDEBAR (izquierda, fijo en altura) */
+.sidebar {
+    width: 250px;
+    background: var(--color-primary);
+    color: var(--color-light);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* CONTENIDO PRINCIPAL */
+.main-container {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background: var(--color-bg);
+}
+
+
+
+.sidebar {
+    width: 250px;
+    background: var(--color-accent); /* #4B6A9B */
+    color: var(--color-light);        /* #FFFFFF */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Logo */
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar .logo img {
+    max-width: 100%;
+    height: 120px;
+    object-fit: contain;
+}
+
+/* Menú */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--color-dark);        /* blanco */
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: background 0.3s ease, padding-left 0.3s ease;
+}
+
+/* Hover con celeste */
+.menu a:hover {
+    background: var(--color-primary);  /* #93C5FD */
+    color: var(--color-light);         /* gris oscuro para contraste */
+    padding-left: 20px;               /* efecto sutil */
+}
+
+
+
+.main-container {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    color: var(--color-dark); /* Texto gris oscuro */
+    background: var(--color-bg); /* #F5F5F5 o blanco suave */
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Títulos principales */
+.main-container h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--color-dark);
+}
+
+/* Subtítulos */
+.main-container h2, 
+.main-container h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: var(--color-dark);
+}
+
+/* Párrafos */
+.main-container p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+
+
+.repo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Separación uniforme entre cards */
+}
+
+/* Cada tarjeta */
+.repo-item {
+    background: var(--color-light); /* Blanco */
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Alinear al inicio si hay descripciones largas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra suave */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efecto hover (elegante) */
+.repo-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Información del repositorio */
+.repo-info {
+    max-width: 60%; /* Para dejar espacio a los botones */
+}
+
+.repo-info strong {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-dark);
+}
+
+.repo-info p {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}
+
+
+/* Contenedor de botones */
+.repo-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Quitar margen del form */
+.repo-buttons form {
+    margin: 0;
+}
+
+/* Estilo base para todos los botones / enlaces */
+.repo-buttons .btn,
+.repo-buttons button {
+    display: inline-block;
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    background: #3498db;
+    /* color por defecto (azul) */
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover general */
+.btn:hover,
+.repo-buttons button:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+
+
+
+
+/* ====== FORMULARIO ====== */
+body.dashboard-page form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+body.dashboard-page form div {
+    margin-bottom: 15px;
+}
+
+body.dashboard-page input[type="text"],
+body.dashboard-page input[type="date"],
+body.dashboard-page input[type="file"],
+body.dashboard-page textarea,
+body.dashboard-page select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+body.dashboard-page form button[type="submit"] {
+    background: #4B6A9B;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+body.dashboard-page form button[type="submit"]:hover {
+    background: #2980b9;
+}
+

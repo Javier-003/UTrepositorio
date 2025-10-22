@@ -1,0 +1,266 @@
+/* Importar fuente moderna (Poppins) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Variables de color para fácil mantenimiento */
+:root {
+    --color-primary: #4B6A9B;
+    /* Azul grisáceo */
+    --color-accent: #93C5FD;
+    /* Celeste */
+    --color-dark: #2D2D2D;
+    /* Gris oscuro (texto) */
+    --color-light: #FFFFFF;
+    /* Blanco */
+    --color-bg: #F5F5F5;
+    /* Fondo general */
+    --color-delete: #E57373;
+    /* Rojo suave eliminar */
+    --color-delete-hover: #D9534F;
+}
+
+
+body.information-page {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-dark);
+    display: flex;
+    min-height: 100vh;
+}
+
+
+
+.dashboard {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* SIDEBAR (izquierda, fijo en altura) */
+.sidebar {
+    width: 250px;
+    background: var(--color-primary);
+    color: var(--color-light);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* CONTENIDO PRINCIPAL */
+.main-container {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background: var(--color-bg);
+}
+
+
+
+.sidebar {
+    width: 250px;
+    background: var(--color-accent);
+    /* #4B6A9B */
+    color: var(--color-light);
+    /* #FFFFFF */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Logo */
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar .logo img {
+    max-width: 100%;
+    height: 120px;
+    object-fit: contain;
+}
+
+/* Menú */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--color-dark);
+    /* blanco */
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: background 0.3s ease, padding-left 0.3s ease;
+}
+
+/* Hover con celeste */
+.menu a:hover {
+    background: var(--color-primary);
+    /* #93C5FD */
+    color: var(--color-light);
+    /* gris oscuro para contraste */
+    padding-left: 20px;
+    /* efecto sutil */
+}
+
+
+
+.main-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.repo-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.repo-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.repo-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.repo-card p {
+    margin: 5px 0;
+}
+
+.integrantes-list {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.media-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.media-item img,
+.media-item video {
+    max-width: 100%;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.download-link {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: 500;
+}
+
+.download-link:hover {
+    text-decoration: underline;
+}
+
+
+
+.repo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Separación uniforme entre cards */
+}
+
+/* Cada tarjeta */
+.repo-item {
+    background: var(--color-light);
+    /* Blanco */
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Alinear al inicio si hay descripciones largas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* Sombra suave */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efecto hover (elegante) */
+.repo-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Información del repositorio */
+.repo-info {
+    max-width: 60%;
+    /* Para dejar espacio a los botones */
+}
+
+.repo-info strong {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--color-dark);
+}
+
+.repo-info p {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}
+
+
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 768px) {
+    body.dashboard-page .dashboard {
+        flex-direction: column;
+    }
+
+    body.dashboard-page .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    body.dashboard-page .menu {
+        flex-direction: row;
+    }
+
+    body.dashboard-page .menu a {
+        margin: 0 5px;
+    }
+
+    body.dashboard-page .repo-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    body.dashboard-page .repo-buttons {
+        margin-top: 10px;
+    }
+}

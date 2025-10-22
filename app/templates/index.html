@@ -1,39 +1,76 @@
 {% extends "base_home.html" %}
+{% block body_class %}index-page{% endblock %}
 {% block content %}
-<nav>
+
+<div class="dashboard">
+
     {% if 'user' in session %}
-    <a href="{{ url_for('repos.repositorios') }}">
-        <button>Crear un nuevo repositorio</button>
-    </a>
-    <a href="{{ url_for('usuarios.logout') }}">
-        <button>Cerrar sesión</button>
-    </a>
-    {% else %}
-    <a href="{{ url_for('usuarios.registro') }}">
-        <button>Crear usuario</button>
-    </a>
-    <a href="{{ url_for('usuarios.login') }}">
-        <button>Iniciar sesión</button>
-    </a>
+    <!-- SIDEBAR (igual que dashboard) -->
+    <aside class="sidebar">
+        <!-- LOGO -->
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+        </div>
+
+        <nav class="menu">
+            <a href="{{ url_for('repos.repositorios') }}">
+                <!-- Icono carpeta (Mis Repositorios) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M2 2h4l2 2h6v10H2V2z" />
+                </svg>
+                Mis Repositorios
+            </a>
+            <a href="{{ url_for('usuarios.logout') }}" class="logout">
+                <!-- Icono de puerta/salida (Cerrar sesión) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
+                    <path
+                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                </svg>
+                Cerrar sesión
+            </a>
+        </nav>
+    </aside>
+
     {% endif %}
-</nav>
 
-<h1>Bienvenido a Portal UTA</h1>
-<p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-container">
 
-<h2>Lista de Repositorios</h2>
-{% if repos %}
-<ul>
-    {% for repo in repos %}
-    <li>
-        <strong>{{ repo.nombre }}</strong>
-        <a href="{{ url_for('main.informacion', repo_id=repo._id) }}">
-            <button>Ver Información</button>
-        </a>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No Existe ningun repositorio aun.</p>
-{% endif %}
+        <h1>Bienvenido a Portal UTA</h1>
+        <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="actions">
+            {% if 'user' in session %}
+            <a href="{{ url_for('repos.repositorios') }}" class="btn primary">Crear nuevo repositorio</a>
+            {% else %}
+            <a href="{{ url_for('usuarios.registro') }}" class="btn primary">Crear usuario</a>
+            <a href="{{ url_for('usuarios.login') }}" class="btn secondary">Iniciar sesión</a>
+            {% endif %}
+        </div>
+
+        <!-- LISTA DE REPOSITORIOS -->
+        <h2>Lista de Repositorios</h2>
+        {% if repos %}
+        <ul class="repo-list">
+            {% for repo in repos %}
+            <li class="repo-item">
+                <div class="repo-info">
+                    <strong>{{ repo.nombre }}</strong>
+                </div>
+                <div class="repo-buttons">
+                    <a href="{{ url_for('main.informacion', repo_id=repo._id) }}" class="btn small">Ver Información</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No existe ningún repositorio aún.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
 {% endblock %}
