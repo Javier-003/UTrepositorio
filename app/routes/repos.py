@@ -80,6 +80,7 @@ def crear():
         "lenguaje": lenguaje,
         "dropbox_path": carpeta_repo_path,
         "dropbox_link": carpeta_repo_link,
+        "estado": "pendiente"
     }
 
     insert_result = db['repositorios'].insert_one(repo_doc)
@@ -217,3 +218,5 @@ def informacion_repo(repo_id,nombre):
     archivos = list(db['archivos'].find({"repo_id": ObjectId(repo_id)}))
 
     return render_template('informacion.html', repo=repo, archivos=archivos)
+
+
