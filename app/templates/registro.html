@@ -2,15 +2,7 @@
 {% block content %}
 <h1>Registro de Usuario</h1>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<ul style="color: rgb(9, 138, 78);">
-	{% for message in messages %}
-	<li>{{ message }}</li>
-	{% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+
 
 <form method="POST" action="{{ url_for('usuarios.registro') }}">
 	<label for="username">Usuario:</label>
