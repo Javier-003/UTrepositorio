@@ -129,9 +129,11 @@ def login():
         )
 
         # Iniciar sesión
-        session['user'] = user['username']
-        session['token'] = token
-        session['role'] = user['role']
+        session['user'] = {
+            "username": user['username'],
+            "role": user.get('role'),
+            "token": token
+        }
         if user['role'] == 'administrador':
             return redirect(url_for('admin.vistaAdmin'))
         else:

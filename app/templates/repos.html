@@ -36,7 +36,7 @@
 
         <h1>Mis Repositorios</h1>
 
-        <p>Bienvenido, {{ session.get('user') }}!</p>
+        <p>Bienvenido, {{ session['user']['username'] }}!</p>
 
         <h2>Lista de Repositorios</h2>
         {% if repos %}

@@ -23,7 +23,7 @@ def obtener_token_usuario():
 @roles_required('usuario', 'admin')
 def repositorios():
     db = current_app.get_db_connection()
-    username = session['user']
+    username = session['user']['username']
 
     # Mostrar solo los repositorios del usuario en MongoDB
     repos = list(db['repositorios'].find({"usuario": username}))
@@ -45,8 +45,8 @@ def crear():
     integrantes = request.form.getlist('Integrantes[]')
     multimedia = request.files.getlist('multimedia[]')
 
-    username = session['user']
-    token = session.get('token')
+    username = session['user']['username']
+    token = session['user']['token']
     usuario = db['usuarios'].find_one({"username": username})
     carpeta_usuario = usuario.get('dropbox_folder_path', username)  # Usa carpeta del usuario o su nombre
 
@@ -66,6 +66,7 @@ def crear():
         return redirect(url_for('repos.repositorios'))
 
     repo_info = resp.json()
+    print("Repositorio creado en Gitea:", repo_info)
 
     # Guardar repo en MongoDB
     repo_doc = {
@@ -82,7 +83,7 @@ def crear():
         "dropbox_link": carpeta_repo_link,
         "estado": "pendiente"
     }
-
+    print("Guardando en MongoDB:", repo_doc)
     insert_result = db['repositorios'].insert_one(repo_doc)
 
     # Subir multimedia a Dropbox
