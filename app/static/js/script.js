@@ -76,11 +76,4 @@ document.addEventListener('DOMContentLoaded', () => {
     agregarAutocompletado(primerInput, primerUl);
 });
 
-const hamburguer = document.querySelector(".toggle-btn");
-const toggle= document.querySelector("#icon");
-hamburguer.addEventListener("click", function () {
-    document.querySelector("#sidebar").classList-toggle("expand");
-    toggle.classList("bxs-chevrons-right");
-    toggle.classList("bxs-chevrons-left");
 
-})
