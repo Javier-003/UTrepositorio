@@ -3,6 +3,7 @@ import requests
 import time
 import dropbox
 from config import Config
+from app.func.func import login_required, roles_required
 
 GITEA_URL = "http://216.238.83.143:3000/api/v1"
 ADMIN_TOKEN = Config.GITEA_TOKEN_ADMIN
@@ -11,11 +12,14 @@ usuarios_routes = Blueprint('usuarios', __name__)
 
 # Registro de usuarios
 @usuarios_routes.route('/registro', methods=['GET', 'POST'])
+@login_required
+@roles_required('administrador')
 def registro():
     if request.method == 'POST':
         username = request.form['username'].strip()
         email = request.form['email'].strip()
         password = request.form['password'].strip()
+        role = "usuario"  # Rol por defecto
 
         if not username or not email or not password:
             flash("Todos los campos son obligatorios.")
@@ -48,7 +52,8 @@ def registro():
             # Guardar usuario en MongoDB
             usuario_doc = {
                 "username": username,
-                "email": email
+                "email": email,
+                "role": role
             }
             db['usuarios'].insert_one(usuario_doc)
 
@@ -85,7 +90,7 @@ def registro():
         else:
             flash(f"Error creando usuario en Gitea: {resp.text}")
 
-    return render_template('registro.html')
+    return redirect(url_for('admin.vistaAdmin'))
 
 
 # Login de usuarios
@@ -124,12 +129,16 @@ def login():
         )
 
         # Iniciar sesión
-        session['user'] = username
-        session['token'] = token
-        mensaje = {'texto': f"Bienvenido {username}", 'color': 'green'}
-        flash(mensaje)
-        return redirect(url_for('repos.repositorios'))
-
+        session['user'] = {
+            "username": user['username'],
+            "role": user.get('role'),
+            "token": token
+        }
+        if user['role'] == 'administrador':
+            return redirect(url_for('admin.vistaAdmin'))
+        else:
+            return redirect(url_for('repos.repositorios'))
+        
     return render_template('login.html')
 
 

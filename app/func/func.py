@@ -18,6 +18,21 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
+def roles_required(*roles):
+    def wrapper(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            user = session.get('user')
+            if not user:
+                flash("Debes iniciar sesión primero")
+                return redirect(url_for('usuarios.login'))
+
+            if user.get('role') not in roles:
+                flash("No tienes permiso para acceder a esta página")
+                return redirect(url_for('main.index'))
+            return f(*args, **kwargs)
+        return decorated
+    return wrapper
 
 def crear_carpeta_dropbox(nombre_carpeta, parent_path=""):
     """

@@ -6,17 +6,6 @@
 <div class="container">
 	<h1>Iniciar Sesión</h1>
 
-	{% with messages = get_flashed_messages() %}
-	{% if messages %}
-	<ul style="color: rgb(9, 138, 78);">
-		{% for message in messages %}
-		<li>{{ message }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-	{% endwith %}
-
-
 	<form method="POST" action="{{ url_for('usuarios.login') }}">
 		<label for="username">Usuario:</label>
 		<input type="text" name="username" id="username" required><br><br>
