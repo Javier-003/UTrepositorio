@@ -1,76 +1,106 @@
 {% extends "base_home.html" %}
 {% block body_class %}index-page{% endblock %}
+
 {% block content %}
 
-<div class="dashboard">
-
+<input type="checkbox" id="sidebar-toggle">
+<!-- Sidebar-->
+<div class="sidebar">
     {% if 'user' in session %}
-    <!-- SIDEBAR (igual que dashboard) -->
-    <aside class="sidebar">
-        <!-- LOGO -->
-        <div class="logo">
+    <div class="sidebar-main">
+        <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+            <div>
+
+            </div>
         </div>
 
-        <nav class="menu">
-            <a href="{{ url_for('repos.repositorios') }}">
-                <!-- Icono carpeta (Mis Repositorios) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M2 2h4l2 2h6v10H2V2z" />
-                </svg>
-                Mis Repositorios
-            </a>
-            <a href="{{ url_for('usuarios.logout') }}" class="logout">
-                <!-- Icono de puerta/salida (Cerrar sesión) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
-                    <path
-                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                </svg>
-                Cerrar sesión
-            </a>
-        </nav>
-    </aside>
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('repos.repositorios') }}">
+                        <span class="las la-folder-open"></span>
+                        Mis repositorios
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
 
+        </div>
+    </div>
     {% endif %}
+</div>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="main-container">
+<!-- Main Content -->
+<div class="main-content">
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
+        </div>
 
-        <h1>Bienvenido a Portal UTA</h1>
-        <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+        <div class="header-icons">
+            <span class="las la-search"></span>
 
-        <!-- BOTONES DE ACCIÓN -->
-        <div class="actions">
-            {% if 'user' in session %}
-            <a href="{{ url_for('repos.repositorios') }}" class="btn primary">Crear nuevo repositorio</a>
+            <!-- Usuario con nombre -->
+            <div class="user-info">
+                <span class="las la-user"></span>
+                <h3>{{ session.get('user') }}</h3>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="page-header">
+            <div>
+                <h1>Bienvenido a Portal UTA</h1>
+                <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
+            </div>
+
+            <div class="actions">
+                {% if 'user' in session %}
+                <a href="{{ url_for('repos.repositorios') }}" class="btn primary">Crear nuevo repositorio</a>
+                {% else %}
+                <a href="{{ url_for('usuarios.registro') }}" class="btn primary">Crear usuario</a>
+                <a href="{{ url_for('usuarios.login') }}" class="btn secondary">Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Cards de repositorios -->
+        <div class="cards">
+            {% if repos %}
+            {% for repo in repos %}
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                        <div class="card-head">
+                            <span>{{ repo.nombre }}</span>
+                            <small>{{ repo.descripcion }}</small>
+                        </div>
+
+                        <div class="repo-buttons">
+                            <a href="{{ url_for('repos.informacion_repo', nombre=repo.nombre, repo_id=repo._id) }}"
+                                class="btn">Ver Información</a>
+                        </div>
+                    </div>
+
+                    <div class="card-chart blue">
+                        <span class="las la-folder"></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
             {% else %}
-            <a href="{{ url_for('usuarios.registro') }}" class="btn primary">Crear usuario</a>
-            <a href="{{ url_for('usuarios.login') }}" class="btn secondary">Iniciar sesión</a>
+            <p>No tienes repositorios aún.</p>
             {% endif %}
         </div>
-
-        <!-- LISTA DE REPOSITORIOS -->
-        <h2>Lista de Repositorios</h2>
-        {% if repos %}
-        <ul class="repo-list">
-            {% for repo in repos %}
-            <li class="repo-item">
-                <div class="repo-info">
-                    <strong>{{ repo.nombre }}</strong>
-                </div>
-                <div class="repo-buttons">
-                    <a href="{{ url_for('main.informacion', repo_id=repo._id) }}" class="btn small">Ver Información</a>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No existe ningún repositorio aún.</p>
-        {% endif %}
-
-    </div>
-
+    </main>
 </div>
 
 {% endblock %}

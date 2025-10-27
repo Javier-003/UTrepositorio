@@ -1,49 +1,82 @@
 {% extends "base_home.html" %}
 {% block body_class %}comandos-page{% endblock %}
+{% block extra_css %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/repocomandos.css') }}">
+{% endblock %}
 {% block content %}
 
-<div class="dashboard">
+<input type="checkbox" id="sidebar-toggle">
 
-    {% if 'user' in session %}
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo">
+
+{% if 'user' in session %}
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-main">
+        <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
 
-        <nav class="menu">
-            <a href="{{ url_for('repos.repositorios') }}">
-                <!-- Icono carpeta -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M2 2h4l2 2h6v10H2V2z" />
-                </svg>
-                Mis Repositorios
-            </a>
-            <a href="{{ url_for('usuarios.logout') }}" class="logout">
-                <!-- Icono logout -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
-                    <path
-                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                </svg>
-                Cerrar sesión
-            </a>
-        </nav>
-    </aside>
-    {% endif %}
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('repos.repositorios') }}">
+                        <span class="las la-folder"></span>
+                        Mis repositorios
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="main-container">
+        </div>
+    </div>
+</div>
+{% endif %}
 
-        <h1>Comandos Git para {{ repo_name }}</h1>
+<!-- Main Content -->
+<div class="main-content">
 
-        <!-- LISTA DE COMANDOS -->
-        <div class="commands">
-            <pre>{{ comandos }}</pre>
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
         </div>
 
-    </div>
+        <div class="header-icons">
+            <span class="las la-search"></span>
 
+            <!-- Usuario con nombre -->
+            <div class="user-info">
+                <span class="las la-user"></span>
+                <h3>{{ session.get('user') }}</h3>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="page-header">
+            <div>
+                <h1>Comandos Git para {{ repo_name }}</h1>
+            </div>
+        </div>
+
+        <!-- Cards de repositorios -->
+        <div class="cards">
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                       <pre>{{ comandos }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
+
+
 
 {% endblock %}

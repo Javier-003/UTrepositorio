@@ -1,107 +1,122 @@
 {% extends "base_home.html" %}
 {% block body_class %}dashboard-page{% endblock %}
+{% block extra_css %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/repos.css') }}">
+{% endblock %}
 {% block content %}
 
-<div class="dashboard">
+<input type="checkbox" id="sidebar-toggle">
 
-    <aside class="sidebar">
-        <!-- LOGO -->
-        <div class="logo">
+{% if 'user' in session %}
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-main">
+        <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
 
-        <nav class="menu">
-            <a href="{{ url_for('main.index') }}">
-                <!-- Icono de casa (Inicio) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path
-                        d="M8 3.293l6 6V15h-4v-4H6v4H2V9.293l6-6zM7.5 1.5L1 8h2v7h4V10h2v5h4V8h2L8.5 1.5a.5.5 0 0 0-.707 0z" />
-                </svg>
-                Inicio
-            </a>
-            <a href="{{ url_for('usuarios.logout') }}">
-                <!-- Icono de puerta/salida (Cerrar sesión) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
-                    <path
-                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                </svg>
-                Cerrar sesión
-            </a>
-        </nav>
-    </aside>
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('main.index') }}">
+                        <span class="las las la-home"></span>
+                        Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
 
+        </div>
+    </div>
+</div>
+{% endif %}
 
-    <div class="main-container">
+<!-- Main Content -->
+<div class="main-content">
 
-        <h1>Mis Repositorios</h1>
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
+        </div>
 
-        <p>Bienvenido, {{ session.get('user') }}!</p>
+        <div class="header-icons">
+            <span class="las la-search"></span>
 
-        <h2>Lista de Repositorios</h2>
-        {% if repos %}
-        <ul class="repo-list">
+            <!-- Usuario con nombre -->
+            <div class="user-info">
+                <span class="las la-user"></span>
+                <h3>{{ session.get('user') }}</h3>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="page-header">
+            <div>
+                <h1>Mis repositorios</h1>
+            </div>
+        </div>
+
+        <!-- Cards de repositorios -->
+        <div class="cards">
+            {% if repos %}
             {% for repo in repos %}
-            <li class="repo-item">
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                        <div class="card-head">
+                            <span>{{ repo.nombre }}</span>
+                            <small>{{ repo.descripcion }}</small>
+                        </div>
 
-                <div class="repo-info">
-                    <strong>{{ repo.nombre }}</strong><br>
-                    {{ repo.descripcion }}
+                        <div class="repo-buttons">
+                            <a href="{{ url_for('repos.comandos', nombre=repo.nombre) }}" class="btn">Ver comandos</a>
+                            <a href="{{ url_for('repos.explorar_archivos', nombre=repo.nombre) }}" class="btn">Explorar
+                                archivos</a>
+                            <a href="{{ url_for('repos.informacion_repo', nombre=repo.nombre, repo_id=repo._id) }}"
+                                class="btn">Ver Información</a>
+                            <form method="POST" action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}">
+                                <button type="submit" class="btn delete">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-chart blue">
+                        <span class="las la-folder"></span>
+                    </div>
                 </div>
-
-                <div class="repo-buttons">
-                    <a href="{{ url_for('repos.comandos', nombre=repo.nombre) }}" class="btn">Ver comandos</a>
-                    <a href="{{ url_for('repos.explorar_archivos', nombre=repo.nombre) }}" class="btn">Explorar
-                        archivos</a>
-                    <a href="{{ url_for('repos.informacion_repo',nombre=repo.nombre,repo_id=repo._id) }}"
-                        class="btn">Ver Información</a>
-
-                    <form method="POST" action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}">
-                        <button type="submit" class="btn delete">Eliminar</button>
-                    </form>
-                </div>
-
-            </li>
+            </div>
             {% endfor %}
-        </ul>
+            {% else %}
+            <p>No tienes repositorios aún.</p>
+            {% endif %}
+        </div>
 
-        {% else %}
-        <p>No tienes repositorios aún.</p>
-        {% endif %}
-
+        <!-- Formulario para crear nuevo repositorio -->
         <h2>Crear nuevo repositorio</h2>
-
-
-        <!-- Formulario-->
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
-
             <div>
                 <label>
                     <p>Nombre del proyecto</p>
-                </label>
-                <label>
                     <input type="text" name="nombre" placeholder="Nombre" required>
                 </label>
             </div>
             <div>
                 <label>Fecha de creación</label>
-                <input type="date" required name="fecha_creacion" max="{{ current_date }}">
+                <input type="date" name="fecha_creacion" required max="{{ current_date }}">
             </div>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    var today = new Date().toISOString().split('T')[0];
-                    document
-                        .querySelector('input[name="fecha_creacion"]')
-                        .setAttribute('max', today);
-                });
-            </script>
+
             <div>
                 <label>
                     <p>Categoria</p>
-                </label>
-                <label>
-                    <input type="radio" name="categoria" value="Aplicación web" required> Aplicacion web
-                    <input type="radio" name="categoria" value="aplicación movil"> Aplicacion Movil
+                    <input type="radio" name="categoria" value="Aplicación web" required> Aplicación Web
+                    <input type="radio" name="categoria" value="Aplicación movil"> Aplicación Móvil
                     <input type="radio" name="categoria" value="Emprendimiento"> Emprendimiento
                     <input type="radio" name="categoria" value="Innovación"> Innovación
                 </label>
@@ -109,67 +124,39 @@
 
             <div id="web-movil-fields" style="display:none;">
                 <div>
-                    <label>
-                        <input type="text" name="framework" placeholder="Framework utilizado" required>
-                    </label>
+                    <input type="text" name="framework" placeholder="Framework utilizado">
                 </div>
                 <div>
-                    <label>
-                        <input type="text" name="lenguaje" placeholder="Lenguaje principal" required>
-                    </label>
+                    <input type="text" name="lenguaje" placeholder="Lenguaje principal">
                 </div>
                 <div>
-                    <label>
-                        <input type="text" name="descripcion" placeholder="descripción general del proyecto" required>
-                    </label>
+                    <input type="text" name="descripcion" placeholder="Descripción general del proyecto">
                 </div>
                 <div>
-                    <label>
-                        <p>Selecciona multimedia (solo imágenes JPG/PNG y videos MP4):</p>
-                        <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
-                    </label>
+                    <p>Selecciona multimedia:</p>
+                    <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
                     <div id="preview" style="margin-top:10px;"></div>
                 </div>
                 <div>
-                    <label>
-                        <p>Integrantes (opcional):</p>
-                        <div id="integrantes-list">
-                            <input type="text" name="Integrantes[]" placeholder="Nombre del integrante">
-                        </div>
-                        <button type="button" id="add-integrante" style="margin-top:5px;">+</button>
-                        <button type="button" id="remove-integrante" style="margin-top:5px;">Quitar</button>
-                    </label>
-                    <script>
-                        document.getElementById('add-integrante').addEventListener('click', function () {
-                            var div = document.createElement('div');
-                            div.innerHTML = '<input type="text" name="Integrantes[]" placeholder="Nombre del integrante">';
-                            document.getElementById('integrantes-list').appendChild(div);
-                        });
-                        document.getElementById('remove-integrante').addEventListener('click', function () {
-                            var integrantesList = document.getElementById('integrantes-list');
-                            if (integrantesList.children.length > 1) {
-                                integrantesList.removeChild(integrantesList.lastElementChild);
-                            }
-                        });
-                    </script>
+                    <p>Integrantes (opcional):</p>
+                    <div id="integrantes-list">
+                        <input type="text" name="Integrantes[]" placeholder="Nombre del integrante">
+                    </div>
+                    <button type="button" id="add-integrante">+</button>
+                    <button type="button" id="remove-integrante">Quitar</button>
                 </div>
             </div>
 
             <div id="otros-fields" style="display:none;">
                 <div>
-                    <label>
-                        <input type="text" name="objetivo" placeholder="Objetivo del proyecto">
-                    </label>
+                    <input type="text" name="objetivo" placeholder="Objetivo del proyecto">
                 </div>
             </div>
 
             <button type="submit">Crear</button>
         </form>
-        <!-- Fin del formulario-->
-    </div>
-
+    </main>
 </div>
-
 
 
 <script>
@@ -218,4 +205,4 @@
 </script>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-{% endblock %}
+{% endblock %}        

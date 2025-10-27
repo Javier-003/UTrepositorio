@@ -1,125 +1,187 @@
 {% extends "base_home.html" %}
 {% block body_class %}information-page{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/informacion.css') }}">
+{% endblock %}
 {% block content %}
 
-<div class="dashboard">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <!-- LOGO -->
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+<input type="checkbox" id="sidebar-toggle">
+
+{% if 'user' in session %}
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-main">
+        <!-- Logo -->
+        <div class="sidebar-user">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
 
-        <nav class="menu">
-            {% if 'user' in session %}
-            <a href="{{ url_for('main.index') }}">
-                <!-- Icono de casa (Volver al inicio) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path
-                        d="M8 3.293l6 6V15h-4v-4H6v4H2V9.293l6-6zM7.5 1.5L1 8h2v7h4V10h2v5h4V8h2L8.5 1.5a.5.5 0 0 0-.707 0z" />
-                </svg>
-                Volver al inicio
-            </a>
-            <a href="{{ url_for('repos.repositorios') }}">
-                <!-- Icono carpeta (Mis repositorios) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M2 2h4l2 2h6v10H2V2z" />
-                </svg>
-                Mis repositorios
-            </a>
-            <a href="{{ url_for('usuarios.logout') }}">
-                <!-- Icono puerta/salida (Cerrar sesión) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
-                    <path
-                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                </svg>
-                Cerrar sesión
-            </a>
-            {% else %}
-            <a href="{{ url_for('usuarios.registro') }}">
-                <!-- Icono usuario (Crear usuario) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                    <path d="M2 14s-1 0-1-1 1-4 7-4 7 3 7 4-1 1-1 1H2z" />
-                </svg>
-                Crear usuario
-            </a>
-            <a href="{{ url_for('usuarios.login') }}">
-                <!-- Icono login (Iniciar sesión) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5A.5.5 0 0 1 10 8z" />
-                    <path d="M13.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
-                </svg>
-                Iniciar sesión
-            </a>
-            {% endif %}
-        </nav>
-    </aside>
-
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="main-container">
-
-        <!-- ETIQUETA / TÍTULO PRINCIPAL -->
-        <h1 class="repo-title">Información del Repositorio</h1>
-
-        <div class="repo-card">
-            <h2 >{{ repo.nombre }}</h2>
-            <p><strong>Descripción:</strong> {{ repo.descripcion }}</p>
-            <p><strong>Categoría:</strong> {{ repo.categoria }}</p>
-            <p><strong>Fecha de creación:</strong> {{ repo.fecha_creacion }}</p>
-
-            {% if repo.framework %}
-            <p><strong>Framework:</strong> {{ repo.framework }}</p>
-            {% endif %}
-
-            {% if repo.lenguaje %}
-            <p><strong>Lenguaje:</strong> {{ repo.lenguaje }}</p>
-            {% endif %}
-
-            <h3>Integrantes:</h3>
-            {% if repo.integrantes %}
+        <!-- Menú para usuarios logueados -->
+        <div class="sidebar-menu">
             <ul>
-                {% for integrante in repo.integrantes %}
-                <li>{{ integrante }}</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>No hay integrantes registrados.</p>
-            {% endif %}
-
-            <h3>Archivos multimedia:</h3>
-            {% if archivos %}
-            <ul>
-                {% for archivo in archivos %}
                 <li>
-                    {% set enlace_directo = archivo.webViewLink.replace('dl=0', 'raw=1') %}
-
-                    {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
-                    <img src="{{ enlace_directo }}" alt="{{ archivo.nombre }}"
-                        style="max-width:200px; display:block; margin-top:5px;">
-                    {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
-                    <video controls style="max-width:300px; display:block; margin-top:5px;">
-                        <source src="{{ enlace_directo }}">
-                        Tu navegador no soporta videos.
-                    </video>
-                    {% endif %}
-
-                    <a href="{{ archivo.webViewLink }}" target="_blank">Descargar archivo</a>
+                    <a href="{{ url_for('main.index') }}">
+                        <span class="las la-home"></span>
+                        Volver al inicio
+                    </a>
                 </li>
-                {% endfor %}
+                <li>
+                    <a href="{{ url_for('repos.repositorios') }}">
+                        <span class="las la-folder"></span>
+                        Mis repositorios
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar sesión
+                    </a>
+                </li>
             </ul>
-            {% else %}
-            <p>No hay archivos para este repositorio.</p>
-            {% endif %}
-
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- Sidebar para usuarios no logueados -->
+<div class="sidebar">
+    <div class="sidebar-main">
+        <div class="sidebar-user">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
 
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('usuarios.registro') }}">
+                        <span class="las la-user-plus"></span>
+                        Crear usuario
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.login') }}">
+                        <span class="las la-sign-in-alt"></span>
+                        Iniciar sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-
 </div>
+{% endif %}
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
+        </div>
+
+        <div class="header-icons">
+            <span class="las la-search"></span>
+
+            <!-- Usuario con nombre -->
+            <div class="user-info">
+                <span class="las la-user"></span>
+                <h3>{{ session.get('user') }}</h3>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div>
+                <h1>Información del Repositorio</h1>
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="card-single repo-info-card">
+                <div class="repo-layout">
+                    <!-- Información textual -->
+                    <div class="repo-details">
+                        <h2>{{ repo.nombre }}</h2>
+                        <p class="repo-desc">{{ repo.descripcion }}</p>
+
+                        <div class="repo-meta">
+                            <p><strong>Categoría:</strong> {{ repo.categoria }}</p>
+                            <p><strong>Fecha de creación:</strong> {{ repo.fecha_creacion }}</p>
+
+                            {% if repo.framework %}
+                            <p><strong>Framework:</strong> {{ repo.framework }}</p>
+                            {% endif %}
+
+                            {% if repo.lenguaje %}
+                            <p><strong>Lenguaje:</strong> {{ repo.lenguaje }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="repo-integrantes">
+                            <h3>Integrantes</h3>
+                            {% if repo.integrantes %}
+                            <ul>
+                                {% for integrante in repo.integrantes %}
+                                <li>{{ integrante }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <p>No hay integrantes registrados.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Multimedia -->
+                    <div class="repo-media">
+                        <h3>Archivos multimedia</h3>
+                        {% if archivos %}
+                        <div class="media-gallery">
+                            {% for archivo in archivos %}
+                            {% set enlace_directo = archivo.webViewLink.replace('dl=0', 'raw=1') %}
+                            <div class="media-item">
+                                {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
+                                <img src="{{ enlace_directo }}" alt="{{ archivo.nombre }}">
+                                {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
+                                <video controls>
+                                    <source src="{{ enlace_directo }}">
+                                </video>
+                                {% endif %}
+
+                                <!-- Nuevo botón de descarga -->
+                                <a href="{{ archivo.webViewLink }}" target="_blank" class="button"
+                                    data-tooltip="Descargar archivo">
+                                    <div class="button-wrapper">
+                                        <div class="text">Descargar</div>
+                                        <span class="icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
+                                                width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
+                                                viewBox="0 0 24 24">
+                                                <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p>No hay archivos multimedia.</p>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 {% endblock %}
