@@ -1,70 +1,103 @@
 {% extends "base_home.html" %}
-{% block body_class %}dashboard-page{% endblock %}
+{% block body_class %}dashboard-admin{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
 {% block content %}
 
-<div class="dashboard">
+<input type="checkbox" id="sidebar-toggle">
 
-    <aside class="sidebar">
-        <!-- LOGO -->
-        <div class="logo">
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-main">
+        <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
 
-        <nav class="menu">
-            <a href="{{ url_for('main.index') }}">
-                <!-- Icono de casa (Inicio) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path
-                        d="M8 3.293l6 6V15h-4v-4H6v4H2V9.293l6-6zM7.5 1.5L1 8h2v7h4V10h2v5h4V8h2L8.5 1.5a.5.5 0 0 0-.707 0z" />
-                </svg>
-                Inicio
-            </a>
-            <a href="{{ url_for('admin.crear_usuario') }}">
-                <!-- Icono de casa (Inicio) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path
-                        d="M8 3.293l6 6V15h-4v-4H6v4H2V9.293l6-6zM7.5 1.5L1 8h2v7h4V10h2v5h4V8h2L8.5 1.5a.5.5 0 0 0-.707 0z" />
-                </svg>
-                Registrar Usuario
-            </a>
-            <a href="{{ url_for('usuarios.logout') }}">
-                <!-- Icono de puerta/salida (Cerrar sesión) -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6 2a1 1 0 0 0-1 1v2h1V3h6v10H6v-2H5v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H6z" />
-                    <path
-                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                </svg>
-                Cerrar sesión
-            </a>
-        </nav>
-    </aside>
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('main.index') }}">
+                        <span class="las las la-home"></span>
+                        Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.crear_usuario') }}">
+                        <span class="las la-user-plus"></span>
+                        Registrar Usuario
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
 
-
-    <div class="main-container">
-
-        <!-- LISTA DE REPOSITORIOS -->
-        <h2>Lista de Repositorios</h2>
-        {% if repos %}
-        <ul class="repo-list">
-            {% for repo in repos %}
-            <li class="repo-item">
-                <div class="repo-info">
-                    <strong>{{ repo.nombre }}</strong>
-                </div>
-                <div class="repo-buttons">
-                    <a href="{{ url_for('admin.ver_informacion_proyecto', repo_id=repo._id) }}" class="btn small">Ver Información</a>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No existe ningún repositorio aún.</p>
-        {% endif %}
-
+        </div>
     </div>
-
 </div>
 
+<!-- Main Content -->
+<div class="main-content">
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
+        </div>
+
+        <div class="header-icons">
+            <span class="las la-search"></span>
+
+            <div class="user-info">
+                <span class="las la-user"></span>
+                <h3>{{ session.get('user')['username'] }}</h3>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div>
+                <h1>Lista de Repositorios</h1>
+            </div>
+        </div>
+
+        <!-- ====== LISTA DE REPOSITORIOS ====== -->
+        <div class="cards">
+            {% if repos %}
+            {% for repo in repos %}
+            <div class="card-single">
+                <div class="card-flex">
+
+                    <div class="card-info">
+                        <div class="card-head">
+                            <h2>{{ repo.nombre }}</h2>
+                        </div>
+
+                        <div class="repo-buttons">
+                            <a href="{{ url_for('admin.ver_informacion_proyecto', repo_id=repo._id) }}" class="btn small">
+                                Ver Información
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-chart blue">
+                        <span class="las la-folder"></span>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No existe ningún repositorio aún.</p>
+            {% endif %}
+        </div>
+    </main>
+</div>
 
 
 
