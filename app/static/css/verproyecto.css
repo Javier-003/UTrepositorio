@@ -439,65 +439,8 @@ main {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* ==== BOTÓN DESCARGAR FINAL SIN SUPERPOSICIÓN ==== */
-.button {
-  --width: 120px;
-  --height: 38px;
-  --tooltip-height: 35px;
-  --tooltip-width: 100px;
-  --gap-between-tooltip-to-button: 18px;
-  --button-color: #4B6A9B; /* azul grisáceo */
-  --tooltip-color: #fff;
-    margin-top: 10px;
-  width: var(--width);
-  height: var(--height);
-  background: var(--button-color);
-  position: relative;
-  text-align: center;
-  border-radius: 0.45em;
-  font-family: 'Poppins', Arial, sans-serif;
-  transition: background 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  overflow: hidden;
-}
 
-/* === Tooltip === */
-.button::before {
-  position: absolute;
-  content: attr(data-tooltip);
-  width: var(--tooltip-width);
-  height: var(--tooltip-height);
-  background-color: var(--tooltip-color);
-  font-size: 0.85rem;
-  color: var(--color-dark);
-  border-radius: .25em;
-  line-height: var(--tooltip-height);
-  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
-  left: calc(50% - var(--tooltip-width) / 2);
-  text-align: center;
-  pointer-events: none;
-}
 
-.button::after {
-  position: absolute;
-  content: '';
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-top-color: var(--tooltip-color);
-  left: calc(50% - 10px);
-  bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
-  pointer-events: none;
-}
-
-.button::after,
-.button::before {
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.4s ease;
-}
 
 /* === Contenido interno === */
 .button-wrapper,
