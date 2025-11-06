@@ -1,22 +1,24 @@
 {% extends "base_home.html" %}
 {% block body_class %}index-page{% endblock %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
 {% block content %}
 
 <input type="checkbox" id="sidebar-toggle">
 <!-- Sidebar-->
 <div class="sidebar">
-    {% if 'user' in session %}
     <div class="sidebar-main">
+
+        <!-- Logo siempre visible -->
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
-            <div>
-
-            </div>
         </div>
 
         <div class="sidebar-menu">
             <ul>
+                {% if 'user' in session %}
+                <!-- Usuario autenticado -->
                 <li>
                     <a href="{{ url_for('repos.repositorios') }}">
                         <span class="las la-folder-open"></span>
@@ -29,12 +31,28 @@
                         Cerrar Sesión
                     </a>
                 </li>
-            </ul>
 
+                {% else %}
+                <!-- Usuario NO autenticado -->
+                <li>
+                    <a href="{{ url_for('usuarios.login') }}">
+                        <span class="las la-sign-in-alt"></span>
+                        Iniciar Sesión
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.registro') }}">
+                        <span class="las la-user-plus"></span>
+                        Crear Usuario
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
         </div>
+
     </div>
-    {% endif %}
 </div>
+
 
 <!-- Main Content -->
 <div class="main-content">
@@ -61,15 +79,6 @@
                 <h1>Bienvenido a Portal UTA</h1>
                 <p>Gestiona tus repositorios de prueba en Gitea desde aquí.</p>
             </div>
-
-            <div class="actions">
-                {% if 'user' in session %}
-                <a href="{{ url_for('repos.repositorios') }}" class="btn primary">Crear nuevo repositorio</a>
-                {% else %}
-                <a href="{{ url_for('usuarios.registro') }}" class="btn primary">Crear usuario</a>
-                <a href="{{ url_for('usuarios.login') }}" class="btn secondary">Iniciar sesión</a>
-                {% endif %}
-            </div>
         </div>
 
         <!-- Cards de repositorios -->
@@ -80,8 +89,8 @@
                 <div class="card-flex">
                     <div class="card-info">
                         <div class="card-head">
-                            <span>{{ repo.nombre }}</span>
-                            <small>{{ repo.descripcion }}</small>
+                            <h2>{{ repo.nombre }}</h2>
+                            <small>#{{ repo.descripcion }}</small>
                         </div>
 
                         <div class="repo-buttons">
