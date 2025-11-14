@@ -23,6 +23,10 @@
     display: none;
 }
 
+.close-sidebar {
+    display: none;
+}
+
 .body-label {
     position: fixed;
     height: 100%;
@@ -118,7 +122,7 @@
     font-size: .9rem;
     display: flex;
     align-items: center;
-    font-weight: 500
+    font-weight: 500;
 }
 
 .sidebar-menu li a span {
@@ -170,6 +174,39 @@ header {
     font-weight: 500;
     color: var(--color-dark);
 }
+
+/* === Barra de búsqueda en el header === */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg);
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 12px;
+    transition: 0.3s;
+}
+
+.search-bar span {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+    margin-right: 8px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: var(--color-dark);
+    width: 180px;
+}
+
+.search-bar:hover,
+.search-bar:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px rgba(75, 106, 155, 0.4);
+}
+
 
 
 .menu-toggle label {
@@ -280,6 +317,20 @@ main {
 }
 
 @media only screen and (max-width: 1124px) {
+     .close-sidebar {
+        display: block;
+        font-size: 2rem;
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 40;
+    }
+
+    .close-sidebar span {
+        font-size: 2rem;
+    }
     .sidebar {
         left: -100%;
         z-index: 30;
@@ -299,7 +350,7 @@ main {
     }
 
     .cards {
-        grid-template-columns: repeat(2, 1rf);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -319,5 +370,12 @@ main {
     .header-actions {
         margin-top: 1rem;
         text-align: right;
+    }
+}
+
+/* Ocultar barra de búsqueda únicamente en teléfonos */
+@media only screen and (max-width: 600px) {
+    .search-bar {
+        display: none;
     }
 }

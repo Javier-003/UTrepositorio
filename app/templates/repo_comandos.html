@@ -1,7 +1,7 @@
 {% extends "base_home.html" %}
 {% block body_class %}comandos-page{% endblock %}
 {% block extra_css %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/repocomandos.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/repocomandos.css') }}">
 {% endblock %}
 {% block content %}
 
@@ -11,6 +11,13 @@
 {% if 'user' in session %}
 <!-- Sidebar -->
 <div class="sidebar">
+
+    <!-- Botón cerrar (mobile only) -->
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
+
     <div class="sidebar-main">
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
@@ -48,12 +55,11 @@
         </div>
 
         <div class="header-icons">
-            <span class="las la-search"></span>
 
             <!-- Usuario con nombre -->
             <div class="user-info">
                 <span class="las la-user"></span>
-                <h3>{{ session.get('user') }}</h3>
+                <h3>{{ session.get('user')['username'] }}</h3>
             </div>
         </div>
     </header>
@@ -69,7 +75,7 @@
             <div class="card-single">
                 <div class="card-flex">
                     <div class="card-info">
-                       <pre>{{ comandos }}</pre>
+                        <pre>{{ comandos }}</pre>
                     </div>
                 </div>
             </div>

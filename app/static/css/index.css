@@ -24,6 +24,10 @@
     display: none;
 }
 
+.close-sidebar {
+    display: none;
+}
+
 .body-label {
     position: fixed;
     height: 100%;
@@ -211,7 +215,7 @@ main {
     justify-content: space-between;
 }
 
-.page-header h1{
+.page-header h1 {
     color: var(--color-primary);
 }
 
@@ -277,13 +281,28 @@ main {
     color: var(--color-primary);
 }
 
-.repo-buttons a{
+.repo-buttons a {
     color: var(--color-primary);
     font-weight: 500;
     font-size: .9rem;
 }
 
 @media only screen and (max-width: 1124px) {
+    .close-sidebar {
+        display: block;
+        font-size: 2rem;
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 40;
+    }
+
+    .close-sidebar span {
+        font-size: 2rem;
+    }
+
     .sidebar {
         left: -100%;
         z-index: 30;

@@ -11,8 +11,14 @@
 {% if 'user' in session %}
 <!-- Sidebar -->
 <div class="sidebar">
+
+    <!-- Botón cerrar (mobile only) -->
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
     <div class="sidebar-main">
-        <!-- Logo -->
+
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
         </div>
@@ -43,8 +49,15 @@
     </div>
 </div>
 {% else %}
+
 <!-- Sidebar para usuarios no logueados -->
 <div class="sidebar">
+
+    <!-- Botón cerrar (mobile only) -->
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
     <div class="sidebar-main">
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
@@ -81,12 +94,11 @@
         </div>
 
         <div class="header-icons">
-            <span class="las la-search"></span>
 
             <!-- Usuario con nombre -->
             <div class="user-info">
                 <span class="las la-user"></span>
-                <h3>{{ session.get('user') }}</h3>
+                <h3>{{ session.get('user')['username'] }}</h3>
             </div>
         </div>
     </header>
@@ -104,7 +116,7 @@
                     <!-- Información textual -->
                     <div class="repo-details">
                         <h2>{{ repo.nombre }}</h2>
-                        <p class="repo-desc">{{ repo.descripcion }}</p>
+                        <p class="repo-desc">#{{ repo.descripcion }}</p>
 
                         <div class="repo-meta">
                             <p><strong>Categoría:</strong> {{ repo.categoria }}</p>
@@ -149,23 +161,7 @@
                                 </video>
                                 {% endif %}
 
-                                <!-- Nuevo botón de descarga -->
-                                <a href="{{ archivo.webViewLink }}" target="_blank" class="button"
-                                    data-tooltip="Descargar archivo">
-                                    <div class="button-wrapper">
-                                        <div class="text">Descargar</div>
-                                        <span class="icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img"
-                                                width="2em" height="2em" preserveAspectRatio="xMidYMid meet"
-                                                viewBox="0 0 24 24">
-                                                <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17">
-                                                </path>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                </a>
+
                             </div>
                             {% endfor %}
                         </div>

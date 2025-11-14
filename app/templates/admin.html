@@ -1,7 +1,7 @@
 {% extends "base_home.html" %}
 {% block body_class %}dashboard-admin{% endblock %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 {% endblock %}
 {% block content %}
 
@@ -9,6 +9,12 @@
 
 <!-- Sidebar -->
 <div class="sidebar">
+
+    <!-- Botón cerrar (mobile only) -->
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
     <div class="sidebar-main">
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
@@ -50,13 +56,17 @@
         </div>
 
         <div class="header-icons">
-            <span class="las la-search"></span>
+            <div class="search-bar">
+                <span class="las la-search"></span>
+                <input type="text" placeholder="Buscar..." id="search-input">
+            </div>
 
             <div class="user-info">
                 <span class="las la-user"></span>
                 <h3>{{ session.get('user')['username'] }}</h3>
             </div>
         </div>
+
     </header>
 
     <main>
@@ -79,7 +89,8 @@
                         </div>
 
                         <div class="repo-buttons">
-                            <a href="{{ url_for('admin.ver_informacion_proyecto', repo_id=repo._id) }}" class="btn small">
+                            <a href="{{ url_for('admin.ver_informacion_proyecto', repo_id=repo._id) }}"
+                                class="btn small">
                                 Ver Información
                             </a>
                         </div>

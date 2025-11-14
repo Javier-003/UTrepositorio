@@ -1,7 +1,7 @@
 {% extends "base_home.html" %}
 {% block body_class %}dashboard-page{% endblock %}
 {% block extra_css %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/repos.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/repos.css') }}">
 {% endblock %}
 {% block content %}
 
@@ -10,6 +10,12 @@
 {% if 'user' in session %}
 <!-- Sidebar -->
 <div class="sidebar">
+
+    <!-- Botón cerrar (mobile only) -->
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
     <div class="sidebar-main">
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
@@ -47,14 +53,19 @@
         </div>
 
         <div class="header-icons">
-            <span class="las la-search"></span>
+            <div class="search-bar">
+                <span class="las la-search"></span>
+                <input type="text" placeholder="Buscar..." id="search-input">
+            </div>
 
             <div class="user-info">
                 <span class="las la-user"></span>
-                <h3>{{ session.get('user') }}</h3>
+                <h3>{{ session.get('user')['username'] }}</h3>
             </div>
         </div>
+
     </header>
+
     <main>
         <div class="page-header">
             <div>
@@ -70,8 +81,8 @@
                 <div class="card-flex">
                     <div class="card-info">
                         <div class="card-head">
-                            <span>{{ repo.nombre }}</span>
-                            <small>{{ repo.descripcion }}</small>
+                            <h2>{{ repo.nombre }}</h2>
+                            <small>#{{ repo.descripcion }}</small>
                         </div>
 
                         <div class="repo-buttons">
@@ -80,15 +91,24 @@
                                 archivos</a>
                             <a href="{{ url_for('repos.informacion_repo', nombre=repo.nombre, repo_id=repo._id) }}"
                                 class="btn">Ver Información</a>
-                            <form method="POST" action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}">
-                                <button type="submit" class="btn delete">Eliminar</button>
+
+                            <!-- Botón de eliminar sin form visible -->
+                            <button class="btn delete"
+                                onclick="document.getElementById('del-{{ repo.nombre }}').submit();">
+                                Eliminar
+                            </button>
+
+                            <!-- Formulario oculto -->
+                            <form id="del-{{ repo.nombre }}" method="POST"
+                                action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}" style="display: none;">
                             </form>
                         </div>
+
                     </div>
 
-                    <div class="card-chart blue">
-                        <span class="las la-folder"></span>
-                    </div>
+
+                    <span class="las la-folder"></span>
+
                 </div>
             </div>
             {% endfor %}
@@ -98,7 +118,7 @@
         </div>
 
         <!-- Formulario para crear nuevo repositorio -->
-        <h2>Crear nuevo repositorio</h2>
+        <h2 class="form">Crear nuevo repositorio</h2>
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
             <div>
                 <label>
@@ -131,11 +151,12 @@
                 <div>
                     <input type="text" name="descripcion" placeholder="Descripción general del proyecto">
                 </div>
-                <div>
-                    <p>Selecciona multimedia:</p>
+                <label class="file-input-label">
+                    Seleccionar archivos
                     <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
-                    <div id="preview" style="margin-top:10px;"></div>
-                </div>
+                </label>
+                <div id="preview" style="margin-top:10px;"></div>
+
                 <div>
                     <p>Integrantes (opcional):</p>
                     <div id="integrantes-list">
@@ -204,4 +225,4 @@
 </script>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-{% endblock %}        
+{% endblock %}

@@ -9,6 +9,12 @@
 
 <!-- Sidebar -->
 <div class="sidebar">
+
+    <!-- Botón cerrar (mobile only) -->
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
     <div class="sidebar-main">
         <div class="sidebar-user">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
@@ -61,8 +67,6 @@
         </div>
 
         <div class="header-icons">
-            <span class="las la-search"></span>
-
             <!-- Usuario con nombre -->
             <div class="user-info">
                 <span class="las la-user"></span>
@@ -129,7 +133,7 @@
                                 </video>
                                 {% endif %}
 
-                            
+
 
                                 <!-- Botones de acción después del botón de descarga -->
                                 <div class="repo-buttons">
