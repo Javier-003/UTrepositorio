@@ -102,6 +102,9 @@
                             {% if repo.lenguaje %}
                             <p><strong>Lenguaje:</strong> {{ repo.lenguaje }}</p>
                             {% endif %}
+                            {% if repo.estado %}
+                            <p><strong>Estado:</strong> {{ repo.estado }}</p>
+                            {% endif %}
                         </div>
 
                         <div class="repo-integrantes">
@@ -132,20 +135,7 @@
                                     <source src="{{ enlace_directo }}">
                                 </video>
                                 {% endif %}
-
-
-
                                 <!-- Botones de acción después del botón de descarga -->
-                                <div class="repo-buttons">
-                                    <a href="{{ url_for('admin.aceptar_proyecto', repo_id=repo._id) }}"
-                                        class="btn accept">
-                                        <span class="las la-check"></span> Aceptar Proyecto
-                                    </a>
-                                    <a href="{{ url_for('admin.rechazar_proyecto', repo_id=repo._id) }}"
-                                        class="btn delete">
-                                        <span class="las la-times"></span> Rechazar Proyecto
-                                    </a>
-                                </div>
 
                             </div>
                             {% endfor %}
@@ -154,6 +144,17 @@
                         <p>No hay archivos multimedia.</p>
                         {% endif %}
                     </div>
+                    {% if repo.estado == 'aceptado'%}
+                    {% else %}
+                    <div class="repo-buttons">
+                        <a href="{{ url_for('admin.aceptar_proyecto', repo_id=repo._id) }}" class="btn accept">
+                            <span class="las la-check"></span> Aceptar Proyecto
+                        </a>
+                        <a href="{{ url_for('admin.rechazar_proyecto', repo_id=repo._id) }}" class="btn delete">
+                            <span class="las la-times"></span> Rechazar Proyecto
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

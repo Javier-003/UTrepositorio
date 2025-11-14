@@ -148,4 +148,4 @@ def logout():
     session.pop('user', None)
     session.pop('token', None)
     flash("Has cerrado sesión correctamente.")
-    return redirect(url_for('usuarios.login'))
+    return redirect(url_for('main.index'))

@@ -45,12 +45,6 @@
                         Iniciar Sesión
                     </a>
                 </li>
-                <li>
-                    <a href="{{ url_for('usuarios.registro') }}">
-                        <span class="las la-user-plus"></span>
-                        Crear Usuario
-                    </a>
-                </li>
                 {% endif %}
             </ul>
         </div>
@@ -90,6 +84,7 @@
         <div class="cards">
             {% if repos %}
             {% for repo in repos %}
+            {% if repo.estado == 'aceptado' %}
             <div class="card-single">
                 <div class="card-flex">
                     <div class="card-info">
@@ -109,6 +104,8 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            {% endif %}
             {% endfor %}
             {% else %}
             <p>No tienes repositorios aún.</p>

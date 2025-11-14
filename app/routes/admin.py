@@ -47,18 +47,16 @@ def rechazar_proyecto(repo_id):
     flash("Proyecto rechazado correctamente.", "success")
     return redirect(url_for('admin.ver_informacion_proyecto', repo_id=repo_id))
 
-@admin_routes.route("/administrador/aceptar_proyecto/<repo_id>", methods=["POST"])
+@admin_routes.route("/administrador/aceptar_proyecto/<repo_id>", methods=["GET", "POST"])
 @login_required
 @roles_required('administrador')
 def aceptar_proyecto(repo_id):
     db = current_app.get_db_connection()
-
     # Actualizar el estado del repositorio a 'aceptado'
     db['repositorios'].update_one(
         {"_id": ObjectId(repo_id)},
         {"$set": {"estado": "aceptado"}}
     )
-
     flash("Proyecto aceptado correctamente.", "success")
     return redirect(url_for('admin.ver_informacion_proyecto', repo_id=repo_id))
 

@@ -141,7 +141,7 @@ def eliminar(nombre):
 @login_required
 @roles_required('usuario', 'admin')
 def comandos(nombre):
-    username = session['user']
+    username = session['user']['username']
     token = session.get('token')
 
     # URL HTTP con token para autenticación automática
@@ -207,8 +207,6 @@ def leer_archivo(repo, filepath):
 
 # Visualizar todo archivo multimedia
 @repos_routes.route('/informacion/<nombre>/<repo_id>')
-@login_required
-@roles_required('usuario', 'admin')
 def informacion_repo(repo_id,nombre):
     db = current_app.get_db_connection()
 
