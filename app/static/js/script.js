@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.name = 'Integrantes[]';
+        input.name = 'integrantes_nombre[]';
         input.placeholder = 'Nombre del integrante';
         input.classList.add('integrante-input');
         input.autocomplete = 'off';

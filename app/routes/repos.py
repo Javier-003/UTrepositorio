@@ -24,7 +24,6 @@ def obtener_token_usuario():
 def repositorios():
     db = current_app.get_db_connection()
     username = session['user']['username']
-
     # Mostrar solo los repositorios del usuario en MongoDB
     repos = list(db['repositorios'].find({"usuario": username}))
     return render_template('repos.html', repos=repos)
@@ -32,18 +31,30 @@ def repositorios():
 # Crear repositorios
 @repos_routes.route('/crear', methods=['POST'])
 @login_required
-@roles_required('usuario', 'admin')
+@roles_required('usuario')
 def crear():
     db = current_app.get_db_connection()
 
     nombre = request.form.get('nombre')
     descripcion = request.form.get('descripcion')
     fecha = request.form.get('fecha_creacion')
+    estado_proyecto = request.form.get('estado')
     categoria = request.form.get('categoria')
-    framework = request.form.get('framework')
-    lenguaje = request.form.get('lenguaje')
-    integrantes = request.form.getlist('Integrantes[]')
+
+    frameworks = request.form.getlist('frameworks[]')
+    lenguajes = request.form.getlist('lenguajes[]')
+
+    integrantes = request.form.getlist('integrantes_nombre[]')
     multimedia = request.files.getlist('multimedia[]')
+
+    plataforma = request.form.get('plataforma')
+    version_control = request.form.get('version')
+
+    objetivos = request.form.get('objetivo')
+    retos = request.form.get('retos')
+    prioridad = request.form.get('prioridad')
+    comentarios = request.form.get('comentarios')
+
 
     username = session['user']['username']
     token = session['user']['token']
@@ -52,7 +63,7 @@ def crear():
 
     # Crear carpeta en Dropbox para este repo
     carpeta_repo_path, carpeta_repo_link = crear_carpeta_dropbox(nombre, parent_path=carpeta_usuario)
-
+    print("Carpeta creada en Dropbox:", carpeta_repo_path, carpeta_repo_link)
     if not carpeta_repo_path:
         flash("Error creando carpeta en Dropbox")
         return redirect(url_for('repos.repositorios'))
@@ -77,10 +88,17 @@ def crear():
         "integrantes": integrantes,
         "fecha_creacion": fecha,
         "categoria": categoria,
-        "framework": framework,
-        "lenguaje": lenguaje,
+        "framework": frameworks,
+        "lenguaje": lenguajes,
         "dropbox_path": carpeta_repo_path,
         "dropbox_link": carpeta_repo_link,
+        "plataforma": plataforma,
+        "version_control": version_control,
+        "objetivos": objetivos,
+        "retos": retos,
+        "prioridad": prioridad,
+        "comentarios": comentarios,
+        "estado_proyecto": estado_proyecto,
         "estado": "pendiente"
     }
     print("Guardando en MongoDB:", repo_doc)
@@ -103,10 +121,10 @@ def crear():
 # Eliminar repositorios
 @repos_routes.route('/repositorios/eliminar/<nombre>', methods=['POST'])
 @login_required
-@roles_required('admin')
+@roles_required('usuario')
 def eliminar(nombre):
     db = current_app.get_db_connection()
-    username = session['user']
+    username = session['user']['username']
     token = session.get('token')
 
     # Buscar el repositorio para obtener la carpeta de Dropbox

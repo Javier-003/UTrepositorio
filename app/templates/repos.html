@@ -97,7 +97,6 @@
                                 onclick="document.getElementById('del-{{ repo.nombre }}').submit();">
                                 Eliminar
                             </button>
-
                             <!-- Formulario oculto -->
                             <form id="del-{{ repo.nombre }}" method="POST"
                                 action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}" style="display: none;">
@@ -120,59 +119,161 @@
         <!-- Formulario para crear nuevo repositorio -->
         <h2 class="form">Crear nuevo repositorio</h2>
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
+
+            <!-- Información general del proyecto -->
             <div>
                 <label>
                     <p>Nombre del proyecto</p>
                     <input type="text" name="nombre" placeholder="Nombre" required>
                 </label>
             </div>
+
             <div>
-                <label>Fecha de creación</label>
-                <input type="date" name="fecha_creacion" required max="{{ current_date }}">
+                <label>
+                    <p>Fecha de creación</p>
+                    <input type="date" name="fecha_creacion" required max="{{ current_date }}">
+                </label>
             </div>
 
             <div>
                 <label>
-                    <p>Categoria</p>
-                    <input type="radio" name="categoria" value="Aplicación web" required> Aplicación Web
-                    <input type="radio" name="categoria" value="Aplicación movil"> Aplicación Móvil
+                    <p>Estado del proyecto</p>
+                    <select name="estado" required>
+                        <option value="Planeación">Planeación</option>
+                        <option value="Desarrollo">Desarrollo</option>
+                        <option value="Completado">Completado</option>
+                        <option value="Pausado">Pausado</option>
+                    </select>
                 </label>
             </div>
 
+            <div>
+                <label>
+                    <p>Categoría</p>
+                    <input type="radio" name="categoria" value="Aplicación web" required> Aplicación Web
+                    <input type="radio" name="categoria" value="Aplicación móvil"> Aplicación Móvil
+                </label>
+            </div>
+
+            <!-- Campos específicos para web/móvil -->
             <div id="web-movil-fields" style="display:none;">
                 <div>
-                    <input type="text" name="framework" placeholder="Framework utilizado">
+                    <label>
+                        <p>Framework(s) utilizado(s)</p>
+                        <div class="custom-multiselect" id="frameworks-multiselect">
+                            <input type="text" placeholder="Selecciona frameworks" readonly id="frameworks-input">
+                            <div class="options">
+                                <label><input type="checkbox" value="React"> React</label>
+                                <label><input type="checkbox" value="Angular"> Angular</label>
+                                <label><input type="checkbox" value="Vue"> Vue</label>
+                                <label><input type="checkbox" value="Django"> Django</label>
+                                <label><input type="checkbox" value="Flask"> Flask</label>
+                                <label><input type="checkbox" value="Laravel"> Laravel</label>
+                                <label><input type="checkbox" value="Spring"> Spring</label>
+                                <label><input type="checkbox" value="Express"> Express</label>
+                                <label><input type="checkbox" value="Flutter"> Flutter</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="frameworks[]" id="frameworks-hidden">
+                    </label>
                 </div>
                 <div>
-                    <input type="text" name="lenguaje" placeholder="Lenguaje principal">
+                    <label>
+                        <p>Lenguaje(s) principal(es)</p>
+                        <div class="custom-multiselect" id="lenguajes-multiselect">
+                            <input type="text" placeholder="Selecciona lenguajes" readonly id="lenguajes-input">
+                            <div class="options">
+                                <label><input type="checkbox" value="JavaScript"> JavaScript</label>
+                                <label><input type="checkbox" value="TypeScript"> TypeScript</label>
+                                <label><input type="checkbox" value="Python"> Python</label>
+                                <label><input type="checkbox" value="Java"> Java</label>
+                                <label><input type="checkbox" value="C#"> C#</label>
+                                <label><input type="checkbox" value="PHP"> PHP</label>
+                                <label><input type="checkbox" value="Ruby"> Ruby</label>
+                                <label><input type="checkbox" value="C++"> C++</label>
+                                <label><input type="checkbox" value="Dart"> Dart</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="lenguajes[]" id="lenguajes-hidden">
+                    </label>
                 </div>
                 <div>
-                    <input type="text" name="descripcion" placeholder="Descripción general del proyecto">
+                    <textarea name="descripcion" placeholder="Descripción general del proyecto" rows="4"
+                        required></textarea>
                 </div>
+
+                <div>
+                    <label>
+                        <p>Plataforma de destino</p>
+                        <select name="plataforma">
+                            <option value="Web">Web</option>
+                            <option value="iOS">iOS</option>
+                            <option value="Android">Android</option>
+                            <option value="Multiplataforma">Multiplataforma</option>
+                        </select>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <p>Versión del proyecto</p>
+                        <input type="text" name="version" placeholder="v1.0.0">
+                    </label>
+                </div>
+
+                <!-- Multimedia -->
                 <label class="file-input-label">
-                    Seleccionar archivos
+                    Seleccionar archivos (imágenes / video)
                     <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
                 </label>
                 <div id="preview" style="margin-top:10px;"></div>
 
+                <!-- Integrantes -->
                 <div>
-                    <p>Integrantes (opcional):</p>
+                    <p>Integrantes (opcional)</p>
                     <div id="integrantes-list">
-                        <input type="text" name="Integrantes[]" placeholder="Nombre del integrante">
+                        <div>
+                            <input type="text" name="integrantes_nombre[]" placeholder="Nombre del integrante"class="integrante-input"
+                        autocomplete="off">
+                    <ul class="sugerencias"></ul>
                     </div>
                     <button type="button" id="add-integrante">+</button>
                     <button type="button" id="remove-integrante">Quitar</button>
                 </div>
-            </div>
 
-            <div id="otros-fields" style="display:none;">
+                <!-- Información adicional -->
                 <div>
-                    <input type="text" name="objetivo" placeholder="Objetivo del proyecto">
+                    <label>
+                        <p>Objetivo principal del proyecto</p>
+                        <textarea name="objetivo" rows="3" placeholder="Objetivo principal"></textarea>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <p>Retos o dificultades enfrentadas</p>
+                        <textarea name="retos" rows="3" placeholder="Describe los retos"></textarea>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <p>Prioridad del proyecto</p>
+                        <select name="prioridad">
+                            <option value="Baja">Baja</option>
+                            <option value="Media">Media</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <p>Comentarios adicionales</p>
+                        <textarea name="comentarios" rows="3" placeholder="Observaciones generales"></textarea>
+                    </label>
                 </div>
             </div>
 
             <button type="submit">Crear</button>
         </form>
+
     </main>
 </div>
 
@@ -182,7 +283,7 @@
         radio.addEventListener('change', function () {
             var webMovil = document.getElementById('web-movil-fields');
             var otros = document.getElementById('otros-fields');
-            if (this.value === 'Aplicación web' || this.value === 'Aplicación movil') {
+            if (this.value === 'Aplicación web' || this.value === 'Aplicación móvil') {
                 webMovil.style.display = 'block';
                 otros.style.display = 'none';
             }
@@ -225,6 +326,56 @@
         document.querySelector('input[name="fecha_creacion"]').setAttribute('max', today);
     });
 </script>
+<script>
+    const multiselect = document.getElementById('frameworks-multiselect');
+    const input = document.getElementById('frameworks-input');
+    const hiddenInput = document.getElementById('frameworks-hidden');
+    const options = multiselect.querySelector('.options');
 
+    input.addEventListener('click', () => {
+        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    });
+
+    options.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const selected = Array.from(options.querySelectorAll('input:checked')).map(cb => cb.value);
+            input.value = selected.join(', ');
+            hiddenInput.value = selected.join(',');
+        });
+    });
+
+    // Cerrar dropdown si se hace click fuera
+    document.addEventListener('click', function (e) {
+        if (!multiselect.contains(e.target)) {
+            options.style.display = 'none';
+        }
+    });
+</script>
+
+<script>
+    const lenguajesMultiselect = document.getElementById('lenguajes-multiselect');
+    const lenguajesInput = document.getElementById('lenguajes-input');
+    const lenguajesHidden = document.getElementById('lenguajes-hidden');
+    const lenguajesOptions = lenguajesMultiselect.querySelector('.options');
+
+    lenguajesInput.addEventListener('click', () => {
+        lenguajesOptions.style.display = lenguajesOptions.style.display === 'block' ? 'none' : 'block';
+    });
+
+    lenguajesOptions.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const selected = Array.from(lenguajesOptions.querySelectorAll('input:checked')).map(cb => cb.value);
+            lenguajesInput.value = selected.join(', ');
+            lenguajesHidden.value = selected.join(',');
+        });
+    });
+
+    // Cerrar dropdown si se hace click fuera
+    document.addEventListener('click', function (e) {
+        if (!lenguajesMultiselect.contains(e.target)) {
+            lenguajesOptions.style.display = 'none';
+        }
+    });
+</script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}
