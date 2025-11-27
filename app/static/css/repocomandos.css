@@ -178,8 +178,8 @@ header {
 
 
 .menu-toggle label {
-    height: 60px;
-    width: 60px;
+    height: 50px;
+    width: 50px;
     display: grid;
     place-items: center;
     font-size: 1.5rem;
@@ -216,7 +216,10 @@ main {
 
 .page-header h1 {
     color: var(--color-primary);
+    font-size: 1.9rem;
+    font-weight: 600;
 }
+
 
 .header-actions button {
     outline: none;
@@ -236,48 +239,37 @@ main {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     margin-top: 2rem;
     grid-gap: 3rem;
 }
 
 .card-single {
-    background: var(--color-light);
+    background: var(--color-bg);
     padding: 1rem;
     box-shadow: 4px 3px 10px rgb(0, 0, 0, 0.2);
     border-radius: 5px;
+    /* 🔹 Asegura que el texto nunca se desborde */
+    white-space: normal;
+    /* Permite saltos de línea */
+    overflow-wrap: break-word;
+    /* Rompe palabras largas automáticamente */
+    word-wrap: break-word;
+    /* Compatibilidad */
 }
+.card-info pre {
+    white-space: pre-wrap !important; /* Mantiene formato pero permite saltos */
+    overflow-wrap: break-word !important; /* Rompe URLs muy largas */
+    word-break: break-word !important; /* Seguridad extra */
+}
+
 
 .card-flex {
     display: grid;
     grid-template-columns: 70% auto;
+    white-space: normal;
+    overflow-wrap: break-word;
 }
-
-.card-head span {
-    display: block;
-    text-transform: uppercase;
-    color: var(--color-dark);
-    font-size: .9rem;
-}
-
-.card-head small {
-    font-weight: 600;
-    color: var(--color-dark);
-}
-
-.card-info h2 {
-    font-size: 2.2rem;
-    color: var(--color-dark);
-}
-
-.card-chart span {
-    font-size: 5rem;
-}
-
-.card-chart.blue span {
-    color: var(--color-primary);
-}
-
 
 @media only screen and (max-width: 1124px) {
     .close-sidebar {

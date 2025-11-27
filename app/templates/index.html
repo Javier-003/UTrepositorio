@@ -63,7 +63,10 @@
         </div>
 
         <div class="header-icons">
-            <span class="las la-search"></span>
+            <div class="search-bar">
+                <span class="las la-search"></span>
+                <input type="text" placeholder="Buscar..." id="search-input">
+            </div>
 
             
             <div class="user-info">
@@ -80,27 +83,26 @@
             </div>
         </div>
 
-        <!-- Cards de repositorios -->
+        <!-- LISTA DE REPOSITORIOS -->
         <div class="cards">
             {% if repos %}
             {% for repo in repos %}
             {% if repo.estado == 'aceptado' %}
-            <div class="card-single">
+            <div class="card-single" data-categoria="{{ repo.categoria }}">
                 <div class="card-flex">
                     <div class="card-info">
                         <div class="card-head">
-                            <h2>{{ repo.nombre }}</h2>
-                            <small>#{{ repo.descripcion }}</small>
+                            <div class="title-row">
+                                <h2>{{ repo.nombre }}</h2>
+                                <span class="las la-folder"></span>
+                            </div>
+                            <small>{{ repo.descripcion }}</small>
                         </div>
 
                         <div class="repo-buttons">
                             <a href="{{ url_for('repos.informacion_repo', nombre=repo.nombre, repo_id=repo._id) }}"
                                 class="btn">Ver Información</a>
                         </div>
-                    </div>
-
-                    <div class="card-chart blue">
-                        <span class="las la-folder"></span>
                     </div>
                 </div>
             </div>
@@ -113,5 +115,29 @@
         </div>
     </main>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-input");
+        const cards = document.querySelectorAll(".card-single");
+
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase().trim();
+
+            cards.forEach(card => {
+                const nombre = card.querySelector(".card-head h2")?.textContent.toLowerCase() || "";
+                const descripcion = card.querySelector(".card-head small")?.textContent.toLowerCase() || "";
+                const categoria = card.getAttribute("data-categoria")?.toLowerCase() || "";
+
+                const match =
+                    nombre.includes(filter) ||
+                    descripcion.includes(filter) ||
+                    categoria.includes(filter);
+
+                card.style.display = match ? "block" : "none";
+            });
+        });
+    });
+</script>
 
 {% endblock %}

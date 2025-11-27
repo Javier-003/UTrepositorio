@@ -68,21 +68,37 @@
 
     <main>
         <div class="page-header">
-            <div>
-                <h1>Mis repositorios</h1>
-            </div>
+            <h1>Mis repositorios</h1>
+
+            <a id="open-modal-btn" class="btn-new-repo">
+                + Nuevo repositorio
+            </a>
         </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, msg in messages %}
+        {% if category == 'success' %}
+        <div class="flash-message success">{{ msg }}</div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
 
         <!-- Cards de repositorios -->
         <div class="cards">
             {% if repos %}
             {% for repo in repos %}
-            <div class="card-single">
+            <div class="card-single" data-categoria="{{ repo.categoria }}">
                 <div class="card-flex">
                     <div class="card-info">
                         <div class="card-head">
-                            <h2>{{ repo.nombre }}</h2>
-                            <small>#{{ repo.descripcion }}</small>
+                            <div class="title-row">
+                                <h2>{{ repo.nombre }}</h2>
+                                <span class="las la-folder"></span>
+                            </div>
+                            <small>{{ repo.descripcion }}</small>
                         </div>
 
                         <div class="repo-buttons">
@@ -92,21 +108,17 @@
                             <a href="{{ url_for('repos.informacion_repo', nombre=repo.nombre, repo_id=repo._id) }}"
                                 class="btn">Ver Información</a>
 
-                            <!-- Botón de eliminar sin form visible -->
                             <button class="btn delete"
                                 onclick="document.getElementById('del-{{ repo.nombre }}').submit();">
                                 Eliminar
                             </button>
-                            <!-- Formulario oculto -->
+
                             <form id="del-{{ repo.nombre }}" method="POST"
                                 action="{{ url_for('repos.eliminar', nombre=repo.nombre) }}" style="display: none;">
                             </form>
                         </div>
 
                     </div>
-
-
-                    <span class="las la-folder"></span>
 
                 </div>
             </div>
@@ -116,166 +128,220 @@
             {% endif %}
         </div>
 
-        <!-- Formulario para crear nuevo repositorio -->
-        <h2 class="form">Crear nuevo repositorio</h2>
-        <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
+        <!-- Modal -->
+        <div id="modal-crear-repo" class="modal-overlay" style="display:none;">
+            <div class="modal-content">
 
-            <!-- Información general del proyecto -->
-            <div>
-                <label>
-                    <p>Nombre del proyecto</p>
-                    <input type="text" name="nombre" placeholder="Nombre" required>
-                </label>
-            </div>
+                <span class="modal-close" id="close-modal-btn">&times;</span>
 
-            <div>
-                <label>
-                    <p>Fecha de creación</p>
-                    <input type="date" name="fecha_creacion" required max="{{ current_date }}">
-                </label>
-            </div>
+                <h2 class="form">Crear nuevo repositorio</h2>
 
-            <div>
-                <label>
-                    <p>Estado del proyecto</p>
-                    <select name="estado" required>
-                        <option value="Planeación">Planeación</option>
-                        <option value="Desarrollo">Desarrollo</option>
-                        <option value="Completado">Completado</option>
-                        <option value="Pausado">Pausado</option>
-                    </select>
-                </label>
-            </div>
+                <form method="POST" enctype="multipart/form-data" action="{{ url_for('repos.crear') }}">
 
-            <div>
-                <label>
-                    <p>Categoría</p>
-                    <input type="radio" name="categoria" value="Aplicación web" required> Aplicación Web
-                    <input type="radio" name="categoria" value="Aplicación móvil"> Aplicación Móvil
-                </label>
-            </div>
-
-            <!-- Campos específicos para web/móvil -->
-            <div id="web-movil-fields" style="display:none;">
-                <div>
-                    <label>
-                        <p>Framework(s) utilizado(s)</p>
-                        <div class="custom-multiselect" id="frameworks-multiselect">
-                            <input type="text" placeholder="Selecciona frameworks" readonly id="frameworks-input">
-                            <div class="options">
-                                <label><input type="checkbox" value="React"> React</label>
-                                <label><input type="checkbox" value="Angular"> Angular</label>
-                                <label><input type="checkbox" value="Vue"> Vue</label>
-                                <label><input type="checkbox" value="Django"> Django</label>
-                                <label><input type="checkbox" value="Flask"> Flask</label>
-                                <label><input type="checkbox" value="Laravel"> Laravel</label>
-                                <label><input type="checkbox" value="Spring"> Spring</label>
-                                <label><input type="checkbox" value="Express"> Express</label>
-                                <label><input type="checkbox" value="Flutter"> Flutter</label>
-                            </div>
-                        </div>
-                        <input type="hidden" name="frameworks[]" id="frameworks-hidden">
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <p>Lenguaje(s) principal(es)</p>
-                        <div class="custom-multiselect" id="lenguajes-multiselect">
-                            <input type="text" placeholder="Selecciona lenguajes" readonly id="lenguajes-input">
-                            <div class="options">
-                                <label><input type="checkbox" value="JavaScript"> JavaScript</label>
-                                <label><input type="checkbox" value="TypeScript"> TypeScript</label>
-                                <label><input type="checkbox" value="Python"> Python</label>
-                                <label><input type="checkbox" value="Java"> Java</label>
-                                <label><input type="checkbox" value="C#"> C#</label>
-                                <label><input type="checkbox" value="PHP"> PHP</label>
-                                <label><input type="checkbox" value="Ruby"> Ruby</label>
-                                <label><input type="checkbox" value="C++"> C++</label>
-                                <label><input type="checkbox" value="Dart"> Dart</label>
-                            </div>
-                        </div>
-                        <input type="hidden" name="lenguajes[]" id="lenguajes-hidden">
-                    </label>
-                </div>
-                <div>
-                    <textarea name="descripcion" placeholder="Descripción general del proyecto" rows="4"
-                        required></textarea>
-                </div>
-
-                <div>
-                    <label>
-                        <p>Plataforma de destino</p>
-                        <select name="plataforma">
-                            <option value="Web">Web</option>
-                            <option value="iOS">iOS</option>
-                            <option value="Android">Android</option>
-                            <option value="Multiplataforma">Multiplataforma</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <p>Versión del proyecto</p>
-                        <input type="text" name="version" placeholder="v1.0.0">
-                    </label>
-                </div>
-
-                <!-- Multimedia -->
-                <label class="file-input-label">
-                    Seleccionar archivos (imágenes / video)
-                    <input type="file" name="multimedia[]" accept="image/*,video/*" multiple id="multimedia-input">
-                </label>
-                <div id="preview" style="margin-top:10px;"></div>
-
-                <!-- Integrantes -->
-                <div>
-                    <p>Integrantes (opcional)</p>
-                    <div id="integrantes-list">
-                        <div>
-                            <input type="text" name="integrantes_nombre[]" placeholder="Nombre del integrante"class="integrante-input"
-                        autocomplete="off">
-                    <ul class="sugerencias"></ul>
+                    <!-- Información general del proyecto -->
+                    <div>
+                        <label>
+                            <p>Nombre del proyecto</p>
+                            <input type="text" name="nombre" placeholder="Nombre" required>
+                        </label>
                     </div>
-                    <button type="button" id="add-integrante">+</button>
-                    <button type="button" id="remove-integrante">Quitar</button>
-                </div>
 
-                <!-- Información adicional -->
-                <div>
-                    <label>
-                        <p>Objetivo principal del proyecto</p>
-                        <textarea name="objetivo" rows="3" placeholder="Objetivo principal"></textarea>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <p>Retos o dificultades enfrentadas</p>
-                        <textarea name="retos" rows="3" placeholder="Describe los retos"></textarea>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <p>Prioridad del proyecto</p>
-                        <select name="prioridad">
-                            <option value="Baja">Baja</option>
-                            <option value="Media">Media</option>
-                            <option value="Alta">Alta</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <p>Comentarios adicionales</p>
-                        <textarea name="comentarios" rows="3" placeholder="Observaciones generales"></textarea>
-                    </label>
-                </div>
+                    <div>
+                        <label>
+                            <p>Fecha de creación</p>
+                            <input type="date" name="fecha_creacion" required max="{{ current_date }}">
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>
+                            <p>Estado del proyecto</p>
+                            <select name="estado" required>
+                                <option value="Planeación">Planeación</option>
+                                <option value="Desarrollo">Desarrollo</option>
+                                <option value="Completado">Completado</option>
+                                <option value="Pausado">Pausado</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>
+                            <p>Categoría</p>
+                            <input type="radio" name="categoria" value="Aplicación web" required> Aplicación Web
+                            <input type="radio" name="categoria" value="Aplicación móvil"> Aplicación Móvil
+                        </label>
+                    </div>
+
+                    <!-- Campos específicos para web/móvil -->
+                    <div id="web-movil-fields" style="display:none;">
+                        <div>
+                            <label>
+                                <p>Framework(s) utilizado(s)</p>
+                                <div class="custom-multiselect" id="frameworks-multiselect">
+                                    <input type="text" placeholder="Selecciona frameworks" readonly
+                                        id="frameworks-input">
+                                    <div class="options">
+                                        <label><input type="checkbox" value="React"> React</label>
+                                        <label><input type="checkbox" value="Angular"> Angular</label>
+                                        <label><input type="checkbox" value="Vue"> Vue</label>
+                                        <label><input type="checkbox" value="Django"> Django</label>
+                                        <label><input type="checkbox" value="Flask"> Flask</label>
+                                        <label><input type="checkbox" value="Laravel"> Laravel</label>
+                                        <label><input type="checkbox" value="Spring"> Spring</label>
+                                        <label><input type="checkbox" value="Express"> Express</label>
+                                        <label><input type="checkbox" value="Flutter"> Flutter</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="frameworks[]" id="frameworks-hidden">
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <p>Lenguaje(s) principal(es)</p>
+                                <div class="custom-multiselect" id="lenguajes-multiselect">
+                                    <input type="text" placeholder="Selecciona lenguajes" readonly id="lenguajes-input">
+                                    <div class="options">
+                                        <label><input type="checkbox" value="JavaScript"> JavaScript</label>
+                                        <label><input type="checkbox" value="TypeScript"> TypeScript</label>
+                                        <label><input type="checkbox" value="Python"> Python</label>
+                                        <label><input type="checkbox" value="Java"> Java</label>
+                                        <label><input type="checkbox" value="C#"> C#</label>
+                                        <label><input type="checkbox" value="PHP"> PHP</label>
+                                        <label><input type="checkbox" value="Ruby"> Ruby</label>
+                                        <label><input type="checkbox" value="C++"> C++</label>
+                                        <label><input type="checkbox" value="Dart"> Dart</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="lenguajes[]" id="lenguajes-hidden">
+                            </label>
+                        </div>
+                        <div>
+                            <textarea name="descripcion" placeholder="Descripción general del proyecto" rows="4"
+                                required></textarea>
+                        </div>
+
+                        <div>
+                            <label>
+                                <p>Plataforma de destino</p>
+                                <select name="plataforma">
+                                    <option value="Web">Web</option>
+                                    <option value="iOS">iOS</option>
+                                    <option value="Android">Android</option>
+                                    <option value="Multiplataforma">Multiplataforma</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <p>Versión del proyecto</p>
+                                <input type="text" name="version" placeholder="v1.0.0">
+                            </label>
+                        </div>
+
+                        <!-- Multimedia -->
+                        <label class="file-input-label">
+                            Seleccionar archivos (imágenes / video)
+                            <input type="file" name="multimedia[]" accept="image/*,video/*" multiple
+                                id="multimedia-input">
+                        </label>
+                        <div id="preview" style="margin-top:10px;"></div>
+
+                        <!-- Integrantes -->
+                        <div>
+                            <p>Integrantes (opcional)</p>
+                            <div id="integrantes-list">
+                                <button type="button" id="add-integrante">+</button>
+                                <button type="button" id="remove-integrante">Quitar</button>
+                                <div>
+                                    <input type="text" name="integrantes_nombre[]" placeholder="Nombre del integrante"
+                                        class="integrante-input" autocomplete="off">
+                                    <ul class="sugerencias"></ul>
+                                </div>
+                            </div>
+
+                            <!-- Información adicional -->
+                            <div>
+                                <label>
+                                    <p>Objetivo principal del proyecto</p>
+                                    <textarea name="objetivo" rows="3" placeholder="Objetivo principal"></textarea>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <p>Retos o dificultades enfrentadas</p>
+                                    <textarea name="retos" rows="3" placeholder="Describe los retos"></textarea>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <p>Prioridad del proyecto</p>
+                                    <select name="prioridad">
+                                        <option value="Baja">Baja</option>
+                                        <option value="Media">Media</option>
+                                        <option value="Alta">Alta</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <p>Comentarios adicionales</p>
+                                    <textarea name="comentarios" rows="3"
+                                        placeholder="Observaciones generales"></textarea>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit">Crear</button>
+                </form>
             </div>
-
-            <button type="submit">Crear</button>
-        </form>
-
+        </div>
     </main>
 </div>
+
+<script>
+    document.getElementById("open-modal-btn").addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("modal-crear-repo").style.display = "flex";
+    });
+
+    document.getElementById("close-modal-btn").addEventListener("click", function () {
+        document.getElementById("modal-crear-repo").style.display = "none";
+    });
+
+    // Cerrar al hacer clic fuera del modal
+    window.addEventListener("click", function (e) {
+        const modal = document.getElementById("modal-crear-repo");
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-input");
+        const cards = document.querySelectorAll(".card-single");
+
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase().trim();
+
+            cards.forEach(card => {
+                const nombre = card.querySelector(".card-head h2")?.textContent.toLowerCase() || "";
+                const descripcion = card.querySelector(".card-head small")?.textContent.toLowerCase() || "";
+                const categoria = card.getAttribute("data-categoria")?.toLowerCase() || "";
+
+                const match =
+                    nombre.includes(filter) ||
+                    descripcion.includes(filter) ||
+                    categoria.includes(filter);
+
+                card.style.display = match ? "block" : "none";
+            });
+        });
+    });
+</script>
 
 
 <script>

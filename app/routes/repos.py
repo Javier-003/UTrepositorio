@@ -35,6 +35,9 @@ def repositorios():
 def crear():
     db = current_app.get_db_connection()
 
+    # Limpiar mensajes flash previos
+    session.pop('_flashes', None)
+
     nombre = request.form.get('nombre')
     descripcion = request.form.get('descripcion')
     fecha = request.form.get('fecha_creacion')
@@ -115,7 +118,7 @@ def crear():
                 "webViewLink": f["webViewLink"]
             })
 
-    flash("Repositorio y multimedia creados correctamente en Dropbox ✅")
+    flash("Repositorio y multimedia creados correctamente en Dropbox ✅", "success")
     return redirect(url_for('repos.repositorios'))
 
 # Eliminar repositorios

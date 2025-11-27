@@ -80,12 +80,15 @@
         <div class="cards">
             {% if repos %}
             {% for repo in repos %}
-            <div class="card-single">
+            <div class="card-single" data-categoria="{{ repo.categoria }}">
                 <div class="card-flex">
-
                     <div class="card-info">
                         <div class="card-head">
-                            <h2>{{ repo.nombre }}</h2>
+                            <div class="title-row">
+                                <h2>{{ repo.nombre }}</h2>
+                                <span class="las la-folder"></span>
+                            </div>
+                            <small>{{ repo.descripcion }}</small>
                         </div>
 
                         <div class="repo-buttons">
@@ -94,10 +97,6 @@
                                 Ver Información
                             </a>
                         </div>
-                    </div>
-
-                    <div class="card-chart blue">
-                        <span class="las la-folder"></span>
                     </div>
 
                 </div>
@@ -113,4 +112,29 @@
 
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-input");
+        const cards = document.querySelectorAll(".card-single");
+
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase().trim();
+
+            cards.forEach(card => {
+                const nombre = card.querySelector(".card-head h2")?.textContent.toLowerCase() || "";
+                const descripcion = card.querySelector(".card-head small")?.textContent.toLowerCase() || "";
+                const categoria = card.getAttribute("data-categoria")?.toLowerCase() || "";
+
+                const match =
+                    nombre.includes(filter) ||
+                    descripcion.includes(filter) ||
+                    categoria.includes(filter);
+
+                card.style.display = match ? "block" : "none";
+            });
+        });
+    });
+</script>
+
 {% endblock %}

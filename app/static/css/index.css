@@ -177,10 +177,41 @@ header {
     color: var(--color-dark);
 }
 
+/* === Barra de búsqueda en el header === */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg);
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 12px;
+    transition: 0.3s;
+}
+
+.search-bar span {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+    margin-right: 8px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: var(--color-dark);
+    width: 180px;
+}
+
+.search-bar:hover,
+.search-bar:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px rgba(75, 106, 155, 0.4);
+}
 
 .menu-toggle label {
-    height: 60px;
-    width: 60px;
+    height: 50px;
+    width: 50px;
     display: grid;
     place-items: center;
     font-size: 1.5rem;
@@ -217,6 +248,8 @@ main {
 
 .page-header h1 {
     color: var(--color-primary);
+    font-size: 1.9rem;
+    font-weight: 600;
 }
 
 .header-actions button {
@@ -236,49 +269,66 @@ main {
 }
 
 
+/* ==== GRID DE LAS CARDS ==== */
 .cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin-top: 2rem;
-    grid-gap: 3rem;
+    grid-gap: 1.8rem;
 }
 
 .card-single {
     background: var(--color-light);
-    padding: 1rem;
+    padding: 0.8rem;
     box-shadow: 4px 3px 10px rgb(0, 0, 0, 0.2);
     border-radius: 5px;
+    /* Animación suave */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
 }
+
+/* ✨ Animación cuando el cursor pasa */
+.card-single:hover {
+    transform: translateY(-6px); /* Se levanta un poco */
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.25); /* Más sombra */
+}
+
+
 
 .card-flex {
-    display: grid;
-    grid-template-columns: 70% auto;
+    display: block;
 }
 
-.card-head span {
-    display: block;
+.title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.title-row h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
     color: var(--color-dark);
-    font-size: .9rem;
+    margin: 0;
+    max-width: 85%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.title-row .la-folder {
+    font-size: 3rem;
+    color: var(--color-primary);
+    flex-shrink: 0;
 }
 
 .card-head small {
     font-weight: 500;
     color: var(--color-descripcion);
-    font-size: .8rem;
-}
-
-.card-info h2 {
-    font-size: 1.5rem;
-    color: var(--color-dark);
-    font-weight: 500;
-}
-
-.card-chart span {
-    font-size: 3rem;
-}
-
-.card-chart.blue span {
-    color: var(--color-primary);
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 5px;
 }
 
 .repo-buttons a {
@@ -286,6 +336,7 @@ main {
     font-weight: 500;
     font-size: .9rem;
 }
+
 
 @media only screen and (max-width: 1124px) {
     .close-sidebar {
@@ -342,5 +393,12 @@ main {
     .header-actions {
         margin-top: 1rem;
         text-align: right;
+    }
+}
+
+/* Ocultar barra de búsqueda únicamente en teléfonos */
+@media only screen and (max-width: 600px) {
+    .search-bar {
+        display: none;
     }
 }

@@ -116,7 +116,7 @@
                     <!-- Información textual -->
                     <div class="repo-details">
                         <h2>{{ repo.nombre }}</h2>
-                        <p class="repo-desc">#{{ repo.descripcion }}</p>
+                        <p class="repo-desc">{{ repo.descripcion }}</p>
 
                         <div class="repo-meta">
                             <p><strong>Categoría:</strong> {{ repo.categoria }}</p>
@@ -146,13 +146,11 @@
                     </div>
 
                     <!-- Multimedia -->
-                    <div class="repo-media">
-                        <h3>Archivos multimedia</h3>
-                        {% if archivos %}
-                        <div class="media-gallery">
+                    <div class="carousel-container">
+                        <div class="carousel-wrapper">
                             {% for archivo in archivos %}
                             {% set enlace_directo = archivo.webViewLink.replace('dl=0', 'raw=1') %}
-                            <div class="media-item">
+                            <div class="carousel-item">
                                 {% if archivo.nombre.endswith(('.png', '.jpg', '.jpeg', '.webp', '.gif')) %}
                                 <img src="{{ enlace_directo }}" alt="{{ archivo.nombre }}">
                                 {% elif archivo.nombre.endswith(('.mp4', '.webm', '.ogg')) %}
@@ -160,23 +158,44 @@
                                     <source src="{{ enlace_directo }}">
                                 </video>
                                 {% endif %}
-
-
                             </div>
                             {% endfor %}
                         </div>
-                        {% else %}
-                        <p>No hay archivos multimedia.</p>
-                        {% endif %}
-                    </div>
 
+                        <!-- Controles -->
+                        <button class="carousel-btn prev">❮</button>
+                        <button class="carousel-btn next">❯</button>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </main>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const wrapper = document.querySelector(".carousel-wrapper");
+        const items = document.querySelectorAll(".carousel-item");
+        const btnPrev = document.querySelector(".carousel-btn.prev");
+        const btnNext = document.querySelector(".carousel-btn.next");
+
+        let index = 0;
+
+        function updateCarousel() {
+            wrapper.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        btnNext.addEventListener("click", () => {
+            index = (index + 1) % items.length;
+            updateCarousel();
+        });
+
+        btnPrev.addEventListener("click", () => {
+            index = (index - 1 + items.length) % items.length;
+            updateCarousel();
+        });
+    });
+</script>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 

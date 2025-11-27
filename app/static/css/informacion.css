@@ -179,8 +179,8 @@ header {
 
 
 .menu-toggle label {
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   display: grid;
   place-items: center;
   font-size: 1.5rem;
@@ -217,6 +217,8 @@ main {
 
 .page-header h1 {
   color: var(--color-primary);
+  font-size: 1.9rem;
+  font-weight: 600;
 }
 
 .header-actions button {
@@ -276,64 +278,6 @@ main {
 }
 
 
-@media only screen and (max-width: 1124px) {
-  .close-sidebar {
-    display: block;
-    font-size: 2rem;
-    color: white;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    cursor: pointer;
-    z-index: 40;
-  }
-
-  .close-sidebar span {
-    font-size: 2rem;
-  }
-
-  .sidebar {
-    left: -100%;
-    z-index: 30;
-  }
-
-  .main-content {
-    margin-left: 0;
-  }
-
-  header {
-    left: 0;
-    width: 100%;
-  }
-
-  #sidebar-toggle:checked~.sidebar {
-    left: 0;
-  }
-
-  card {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .cards {
-    grid-template-columns: 100%;
-  }
-
-  .page-header {
-    display: block;
-  }
-
-  .header-actions button:first-child {
-    margin-left: 0rem;
-  }
-
-  .header-actions {
-    margin-top: 1rem;
-    text-align: right;
-  }
-}
-
 
 /* ==== INFO DEL REPO ==== */
 .repo-info-card {
@@ -350,10 +294,11 @@ main {
 }
 
 .repo-details h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: var(--color-dark);
   margin-bottom: .5rem;
   text-align: center;
+  font-weight: 600;
 }
 
 .repo-desc {
@@ -388,27 +333,118 @@ main {
   color: var(--color-primary);
 }
 
+
 /* === Multimedia === */
-.repo-media {
-  padding: 1rem;
-  border-radius: 8px;
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
-.media-gallery {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+.carousel-wrapper {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
 }
 
-.media-item {
+.carousel-item {
+  min-width: 100%;
   text-align: center;
 }
 
-.media-item img,
-.media-item video {
-  max-width: 100%;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.carousel-item img,
+.carousel-item video {
+  width: 100%;
+  border-radius: 8px;
+  max-height: 450px;
+  object-fit: contain;
+}
+
+/* Botones */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.carousel-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-btn.next {
+  right: 10px;
+}
+
+
+@media only screen and (max-width: 1124px) {
+  .close-sidebar {
+    display: block;
+    font-size: 2rem;
+    color: white;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 40;
+  }
+
+  .close-sidebar span {
+    font-size: 2rem;
+  }
+
+  .sidebar {
+    left: -100%;
+    z-index: 30;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  header {
+    left: 0;
+    width: 100%;
+  }
+
+  #sidebar-toggle:checked~.sidebar {
+    left: 0;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .cards {
+    grid-template-columns: 100%;
+  }
+
+  .page-header {
+    display: block;
+  }
+
+  .header-actions button:first-child {
+    margin-left: 0rem;
+  }
+
+  .header-actions {
+    margin-top: 1rem;
+    text-align: right;
+  }
 }
 
 
@@ -421,5 +457,92 @@ main {
 
   .repo-media {
     margin-top: 2rem;
+  }
+}
+
+/* === Responsive para celulares (evita desbordes) === */
+@media (max-width: 600px) {
+
+  .repo-info-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 1.2rem;
+    overflow: hidden;
+  }
+
+  .repo-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .repo-details,
+  .repo-media {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Evita deformación de textos */
+  .repo-details *,
+  .repo-media *,
+  .repo-meta p,
+  .repo-desc {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .repo-media h3 {
+    margin-top: 1rem;
+  }
+
+  .media-gallery {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .media-item img,
+  .media-item video {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+  }
+
+  /* Botones adaptados al ancho */
+  .repo-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.8rem;
+  }
+
+  .repo-buttons .btn {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.7rem;
+  }
+
+}
+
+/* === Extra: soporte para pantallas ultra pequeñas (iPhone SE, Galaxy A, teléfonos 320px) === */
+@media (max-width: 360px) {
+
+  .repo-info-card {
+    padding: 0.7rem !important;
+  }
+
+  .repo-details h2 {
+    font-size: 1.2rem !important;
+  }
+
+  .repo-meta p {
+    font-size: 0.8rem !important;
+  }
+
+  .repo-integrantes h3,
+  .repo-media h3 {
+    font-size: 1rem !important;
+  }
+
+  .media-item img,
+  .media-item video {
+    max-height: 150px !important;
   }
 }
