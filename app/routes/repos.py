@@ -6,6 +6,7 @@ import requests
 from app.func.func import crear_carpeta_dropbox, login_required, procesar_y_subir_multimedia_dropbox, roles_required
 
 GITEA_URL = "http://216.238.83.143:3000/api/v1"
+GITEA_WEB_URL = "http://216.238.83.143:3000"
 
 repos_routes = Blueprint('repos', __name__)
 
@@ -128,7 +129,7 @@ def crear():
 def eliminar(nombre):
     db = current_app.get_db_connection()
     username = session['user']['username']
-    token = session.get('token')
+    token = session['user']['token']
 
     # Buscar el repositorio para obtener la carpeta de Dropbox
     repo = db['repositorios'].find_one({"nombre": nombre, "usuario": username})
@@ -163,10 +164,10 @@ def eliminar(nombre):
 @roles_required('usuario', 'admin')
 def comandos(nombre):
     username = session['user']['username']
-    token = session.get('token')
+    token = session['user']['token']
 
     # URL HTTP con token para autenticación automática
-    clone_url = f"https://freewheeling-variform-arnoldo.ngrok-free.dev/{username}/{nombre}.git"
+    clone_url = f"http://{username}:{token}@216.238.83.143:3000/{username}/{nombre}.git"
 
     comandos_git = f"""# subir tu proyecto a tu repositorio "{nombre}"
 git init    
@@ -179,15 +180,14 @@ git push -u origin main
 
     return render_template('repo_comandos.html', repo_name=nombre, comandos=comandos_git)
 
-
 # Explorar archivos y carpetas
 @repos_routes.route('/repositorios/<nombre>/archivos/', defaults={'path': ''})
 @repos_routes.route('/repositorios/<nombre>/archivos/<path:path>')
 @login_required
 @roles_required('usuario', 'admin')
 def explorar_archivos(nombre, path):
-    username = session['user']
-    token = session.get('token')
+    username = session['user']['username']
+    token = session['user']['token']
     headers = {"Authorization": f"token {token}"}
 
     url = f"{GITEA_URL}/repos/{username}/{nombre}/contents/{path}"
@@ -210,8 +210,8 @@ def explorar_archivos(nombre, path):
 @login_required
 @roles_required('usuario', 'admin')
 def leer_archivo(repo, filepath):
-    username = session['user']
-    token = session.get('token')
+    username = session['user']['username']
+    token = session['user']['token']
     headers = {"Authorization": f"token {token}"}
 
     url = f"{GITEA_URL}/repos/{username}/{repo}/contents/{filepath}"
