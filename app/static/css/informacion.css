@@ -552,3 +552,375 @@ main {
     max-height: 150px !important;
   }
 }
+.btn-new-repo {
+    background: #4B6A9B;
+    color: white;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 1.0rem;
+    text-decoration: none;
+    transition: 0.3s;
+    white-space: nowrap;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+
+.btn-new-repo:hover {
+    background: #3a537a;
+}
+
+h2 {
+    margin-top: 30px;
+    color: var(--color-primary);
+    text-align: center;
+}
+
+body.dashboard-page form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+body.dashboard-page form div {
+    margin-bottom: 15px;
+}
+
+body.dashboard-page input[type="text"]:not(#search-input),
+body.dashboard-page input[type="date"],
+body.dashboard-page textarea,
+body.dashboard-page select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: var(--color-light);
+}
+
+form button[type="submit"] {
+    background: var(--color-primary);
+    color: white;
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: 0.3s;
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+}
+
+form button[type="submit"]:hover {
+    opacity: 0.95;
+    transform: translateY(-2px);
+}
+
+
+#add-integrante,
+#remove-integrante {
+    background: #4B6A9B;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+
+
+#add-integrante:hover,
+#remove-integrante:hover {
+    background: #3b567d;
+    transform: scale(1.05);
+}
+
+
+#add-integrante {
+    border-radius: 50px;
+    padding: 6px 14px;
+}
+
+
+#remove-integrante {
+    background: #E57373;
+}
+
+#remove-integrante:hover {
+    background: #D9534F;
+}
+
+
+.file-input-label input[type="file"] {
+    display: none;
+}
+
+
+.file-input-label {
+    display: inline-block;
+    padding: 10px 16px;
+    background: var(--color-primary);
+    color: white;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+.file-input-label:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* ==== MODAL ESTÉTICO ==== */
+
+.repo-modal {
+    padding: 30px;
+    border-radius: 15px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.form-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* ==== SECCIONES ==== */
+
+.repo-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.repo-block {
+    background: #f9f9f9;
+    padding: 18px;
+    border-radius: 12px;
+    border-left: 5px solid #4c8bf5;
+}
+
+.repo-block h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* ==== GRID DE INFORMACIÓN ==== */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.info-item {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* ==== DESCRIPCIÓN ==== */
+
+.info-description {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* ==== INTEGRANTES ==== */
+
+.integrantes-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.integrante-item {
+    background: white;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.no-integrantes {
+    color: #777;
+    font-style: italic;
+}
+
+/* ==== BADGES ==== */
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: white;
+}
+
+.badge-green { background: #28a745; }
+.badge-red { background: #dc3545; }
+.badge-yellow { background: #ffc107; color: black; }
+
+
+
+/* ==== UPDATE MODAL ==== */
+/* --- MODAL UPDATE --- */
+.update-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.update-modal-content {
+    background: #fff;
+    width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.update-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Form styling */
+.update-form-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.update-form-group p {
+    margin: 0 0 6px 0;
+    font-weight: 600;
+}
+
+.update-form-group input,
+.update-form-group select,
+.update-form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+/* MULTISELECT */
+.update-multiselect {
+    position: relative;
+}
+
+.update-multiselect input {
+    cursor: pointer;
+    background: #fff;
+}
+
+.update-options {
+    display: none;
+    position: absolute;
+    background: #fff;
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    border-radius: 6px;
+    margin-top: 4px;
+    z-index: 99999;
+}
+
+.update-multiselect.open .update-options {
+    display: block;
+}
+
+.update-options label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Submit */
+.update-submit-btn {
+    background: #4e73df;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.update-submit-btn:hover {
+    background: #2e59d9;
+}

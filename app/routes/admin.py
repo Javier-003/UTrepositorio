@@ -32,16 +32,18 @@ def ver_informacion_proyecto(repo_id):
 
     return render_template('admin_verProyecto.html', repo=repo, archivos=archivos)
 
-@admin_routes.route("/administrador/rechazar_proyecto/<repo_id>", methods=["POST"])
+@admin_routes.route("/administrador/rechazar_proyecto/<repo_id>", methods=["GET", "POST"])
 @login_required
 @roles_required('administrador')
 def rechazar_proyecto(repo_id):
     db = current_app.get_db_connection()
+    razon = request.form.get('razon', '')
 
     # Actualizar el estado del repositorio a 'rechazado'
     db['repositorios'].update_one(
         {"_id": ObjectId(repo_id)},
-        {"$set": {"estado": "rechazado"}}
+        {"$set": {"estado": "rechazado",
+                  "razon_rechazo":razon}}
     )
 
     flash("Proyecto rechazado correctamente.", "success")

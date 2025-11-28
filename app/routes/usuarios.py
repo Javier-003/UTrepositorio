@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 import requests
 import time
@@ -84,8 +85,8 @@ def registro():
                 flash(f"Usuario creado, pero no se pudo crear carpeta en Dropbox: {e}")
                 print(f"Error Dropbox: {e}")
 
-            flash("Usuario creado correctamente. Ahora inicia sesión para generar tu token.")
-            return redirect(url_for('usuarios.login'))
+            flash("Usuario creado registrado correctamente", "success")
+            return redirect(url_for('admin.vistaAdmin'))
 
         else:
             flash(f"Error creando usuario en Gitea: {resp.text}")
@@ -140,7 +141,6 @@ def login():
             return redirect(url_for('repos.repositorios'))
         
     return render_template('login.html')
-
 
 # Logout de usuarios
 @usuarios_routes.route('/logout')

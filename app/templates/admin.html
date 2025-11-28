@@ -75,7 +75,15 @@
                 <h1>Lista de Repositorios</h1>
             </div>
         </div>
-
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, msg in messages %}
+        {% if category == 'success' %}
+        <div class="flash-message success">{{ msg }}</div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <!-- ====== LISTA DE REPOSITORIOS ====== -->
         <div class="cards">
             {% if repos %}

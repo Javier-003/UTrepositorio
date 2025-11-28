@@ -31,7 +31,16 @@
 			<input type="password" class="input-field" id="reg-pass" name="password" required>
 			<label for="reg-pass" class="label">Contraseña</label>
 			<i class='bx bx-lock-alt icon'></i>
-		</div>
+    	</div>
+		<ul id="pass-rules" style="font-size:14px; margin-top:5px; list-style:none; padding-left:0;">
+			<li id="rule-mayus">✘ Al menos una letra mayúscula</li>
+			<li id="rule-num">✘ Al menos un número</li>
+			<li id="rule-special">✘ Al menos un carácter especial</li>
+			<li id="rule-length">✘ Mínimo 8 caracteres</li>
+		</ul>
+
+
+    	<p id="msg" style="color:red; font-size:14px; display:none;"></p>
 
 		<div class="form-cols">
 			<div class="col-1"></div>
@@ -47,5 +56,89 @@
 		</div>
 	</form>
 </div>
+<script>
+    const form = document.querySelector(".register-form");
+    const passwordInput = document.getElementById("reg-pass");
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("SignUpBtn");
+
+    // Reglas visuales
+    const ruleMayus = document.getElementById("rule-mayus");
+    const ruleNum = document.getElementById("rule-num");
+    const ruleSpecial = document.getElementById("rule-special");
+    const ruleLength = document.getElementById("rule-length");
+
+    // Expresiones regulares
+    const regexMayus = /[A-Z]/;
+    const regexNum = /\d/;
+    const regexSpecial = /[^A-Za-z0-9]/;
+
+    function validarPassword() {
+        const password = passwordInput.value;
+        let valido = true;
+
+        // Mayúscula
+        if (regexMayus.test(password)) {
+            ruleMayus.innerText = "✔ Al menos una letra mayúscula";
+            ruleMayus.style.color = "green";
+        } else {
+            ruleMayus.innerText = "✘ Al menos una letra mayúscula";
+            ruleMayus.style.color = "red";
+            valido = false;
+        }
+
+        // Número
+        if (regexNum.test(password)) {
+            ruleNum.innerText = "✔ Al menos un número";
+            ruleNum.style.color = "green";
+        } else {
+            ruleNum.innerText = "✘ Al menos un número";
+            ruleNum.style.color = "red";
+            valido = false;
+        }
+
+        // Carácter especial
+        if (regexSpecial.test(password)) {
+            ruleSpecial.innerText = "✔ Al menos un carácter especial";
+            ruleSpecial.style.color = "green";
+        } else {
+            ruleSpecial.innerText = "✘ Al menos un carácter especial";
+            ruleSpecial.style.color = "red";
+            valido = false;
+        }
+
+        // Longitud
+        if (password.length >= 8) {
+            ruleLength.innerText = "✔ Mínimo 8 caracteres";
+            ruleLength.style.color = "green";
+        } else {
+            ruleLength.innerText = "✘ Mínimo 8 caracteres";
+            ruleLength.style.color = "red";
+            valido = false;
+        }
+
+        // Estilo del input
+        passwordInput.style.borderColor = valido ? "green" : "red";
+
+        // Activar / desactivar botón
+        btn.disabled = !valido;
+
+        return valido;
+    }
+
+    // Validación en tiempo real
+    passwordInput.addEventListener("input", validarPassword);
+
+    // Validación al enviar
+    form.addEventListener("submit", function (e) {
+        if (!validarPassword()) {
+            e.preventDefault();
+            msg.style.display = "block";
+            msg.innerText = "La contraseña no cumple los requisitos.";
+        } else {
+            msg.style.display = "none";
+        }
+    });
+</script>
 
 {% endblock %}

@@ -25,9 +25,16 @@ def obtener_token_usuario():
 def repositorios():
     db = current_app.get_db_connection()
     username = session['user']['username']
-    # Mostrar solo los repositorios del usuario en MongoDB
-    repos = list(db['repositorios'].find({"usuario": username}))
+
+    repos = list(db['repositorios'].find({
+        "$or": [
+            {"usuario": username},                # Repos que creó el usuario
+            {"integrantes": username}             # Repos donde aparece en miembros
+        ]
+    }))
+
     return render_template('repos.html', repos=repos)
+
 
 # Crear repositorios
 @repos_routes.route('/crear', methods=['POST'])
@@ -122,6 +129,67 @@ def crear():
     flash("Repositorio creado correctamente ✅", "success")
     return redirect(url_for('repos.repositorios'))
 
+
+
+# Update repositorios
+@repos_routes.route('/repositorios/actualizar/<repo_id>', methods=['POST'])
+@login_required
+@roles_required('usuario')
+def update(repo_id):
+    db = current_app.get_db_connection()
+
+    # Limpiar mensajes flash previos
+    session.pop('_flashes', None)
+
+
+    descripcion = request.form.get('descripcion')
+    fecha = request.form.get('fecha_creacion')
+    estado_proyecto = request.form.get('estado')
+    categoria = request.form.get('categoria')
+
+    frameworks = request.form.getlist('frameworks[]')
+    lenguajes = request.form.getlist('lenguajes[]')
+
+    integrantes = request.form.getlist('integrantes_nombre[]')
+
+    plataforma = request.form.get('plataforma')
+    version_control = request.form.get('version')
+
+    objetivos = request.form.get('objetivo')
+    retos = request.form.get('retos')
+    prioridad = request.form.get('prioridad')
+    comentarios = request.form.get('comentarios')
+
+
+    username = session['user']['username']
+    token = session['user']['token']
+    usuario = db['usuarios'].find_one({"username": username})
+  # Usa carpeta del usuario o su nombre
+
+    # Actualizar repo en MongoDB
+    repo_doc = {
+
+        "descripcion": descripcion,
+        "usuario": username,
+        "integrantes": integrantes,
+        "fecha_creacion": fecha,
+        "categoria": categoria,
+        "framework": frameworks,
+        "lenguaje": lenguajes,
+        "plataforma": plataforma,
+        "version_control": version_control,
+        "objetivos": objetivos,
+        "retos": retos,
+        "prioridad": prioridad,
+        "comentarios": comentarios,
+        "estado_proyecto": estado_proyecto,
+        "estado": "pendiente"
+    }
+    print("Actualizando en MongoDB:", repo_doc)
+    db['repositorios'].update_one({"_id": ObjectId(repo_id)}, {"$set": repo_doc})
+
+    flash("Repositorio actualizado correctamente ✅", "success")
+    return redirect(url_for('repos.repositorios'))
 # Eliminar repositorios
 @repos_routes.route('/repositorios/eliminar/<nombre>', methods=['POST'])
 @login_required
