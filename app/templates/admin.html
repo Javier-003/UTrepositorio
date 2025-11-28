@@ -85,7 +85,16 @@
                     <div class="card-info">
                         <div class="card-head">
                             <div class="title-row">
-                                <h2>{{ repo.nombre }}</h2>
+                                {% if repo.estado == "aceptado"%}
+                                <h2 style="color: green;">{{ repo.nombre }}</h2>
+                                <small>Repositorio Aceptado</small>
+                                {% elif repo.estado == "rechazado"%}
+                                <h2 style="color: red;">{{ repo.nombre }}</h2>
+                                <small>Repositorio Rechazado</small>
+                                {% else %}
+                                <h2 style="color: orange;">{{ repo.nombre }}</h2>
+                                <small>Repositorio en revición</small>
+                                {% endif %}
                                 <span class="las la-folder"></span>
                             </div>
                             <small>{{ repo.descripcion }}</small>

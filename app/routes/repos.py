@@ -119,7 +119,7 @@ def crear():
                 "webViewLink": f["webViewLink"]
             })
 
-    flash("Repositorio y multimedia creados correctamente en Dropbox ✅", "success")
+    flash("Repositorio creado correctamente ✅", "success")
     return redirect(url_for('repos.repositorios'))
 
 # Eliminar repositorios
@@ -155,7 +155,7 @@ def eliminar(nombre):
     response = requests.delete(f"{GITEA_URL}/repos/{username}/{nombre}", headers=headers)
     print(response.json() if response.content else "Repositorio eliminado en Gitea")  # debug
 
-    flash("Repositorio y archivos asociados eliminados correctamente")
+    flash("Repositorio y archivos asociados eliminados correctamente", "success")
     return redirect(url_for('repos.repositorios'))
 
 # Ver comandos de un repositorio
