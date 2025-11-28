@@ -1,19 +1,161 @@
 {% extends "base_home.html" %}
+{% block body_class %}archivos-page{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/archivos.css') }}">
+{% endblock %}
 {% block content %}
-<h2>Repositorio: {{ repo }}</h2>
-{% if path %}
-<p>Ruta: {{ path }}</p>
-<a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=path.rsplit('/', 1)[0]) }}">🔙 Volver</a>
+
+<input type="checkbox" id="sidebar-toggle">
+
+{% if 'user' in session %}
+<!-- Sidebar -->
+<div class="sidebar">
+
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
+    <div class="sidebar-main">
+        <div class="sidebar-user">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('repos.repositorios') }}">
+                        <span class="las la-folder"></span>
+                        Mis repositorios
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endif %}
-<ul>
-    {% for f in archivos %}
-    <li>
-        {% if f.type == 'dir' %}
-        📁 <a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=f.path) }}">{{ f.name }}</a>
-        {% else %}
-        📄 <a href="{{ url_for('repos.leer_archivo', repo=repo, filepath=f.path) }}">{{ f.name }}</a>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
+        </div>
+
+        <div class="header-icons">
+            <div class="search-bar">
+                <span class="las la-search"></span>
+                <input type="text" placeholder="Buscar..." id="search-input">
+            </div>
+
+            <div class="header-icons">
+                <div class="user-info">
+                    <span class="las la-user"></span>
+                    <h3>{{ session.get('user')['username'] }}</h3>
+                </div>
+            </div>
+    </header>
+
+    <main>
+
+        <div class="page-header">
+            <div>
+                <h1>Archivos del Repositorio {{ repo }}</h1>
+            </div>
+        </div>
+
+        <!-- Tu estructura original -->
+        <div class="cards">
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+
+                        {% if path %}
+                        <p>Ruta: {{ path }}</p>
+                        <a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=path.rsplit('/', 1)[0]) }}">
+                            🔙 Volver
+                        </a>
+                        {% endif %}
+
+                        <!-- LISTA PARA FILTRAR -->
+                        <ul id="file-list">
+                            {% for f in archivos %}
+                            <li class="file-item">
+                                {% if f.type == 'dir' %}
+                                📁 <a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=f.path) }}">{{
+                                    f.name }}</a>
+                                {% else %}
+                                📄 <a href="{{ url_for('repos.leer_archivo', repo=repo, filepath=f.path) }}">{{ f.name
+                                    }}</a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("search-input");
+        const items = document.querySelectorAll("#file-list .file-item");
+        const cardSingle = document.querySelector(".card-single");
+        const fileList = document.getElementById("file-list");
+
+        // Crear mensaje fuera de la card
+        let noResultsEl = document.createElement("div");
+        noResultsEl.className = "no-results";
+        noResultsEl.style.display = "none";
+        noResultsEl.style.padding = "1rem";
+        noResultsEl.style.textAlign = "center";
+        noResultsEl.style.color = "#555";
+        noResultsEl.textContent = "No se encontraron archivos o carpetas.";
+
+        // Insertarlo FUERA de la card para que no desaparezca
+        document.querySelector(".cards").appendChild(noResultsEl);
+
+        function filterList() {
+            const filter = input.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            items.forEach(li => {
+                const a = li.querySelector("a");
+                const name = a ? a.textContent.trim().toLowerCase() : li.textContent.trim().toLowerCase();
+
+                if (filter === "" || name.includes(filter)) {
+                    li.style.display = "";
+                    visibleCount++;
+                } else {
+                    li.style.display = "none";
+                }
+            });
+
+            if (visibleCount === 0) {
+                cardSingle.style.display = "none";
+                noResultsEl.style.display = "block";
+            } else {
+                cardSingle.style.display = "";
+                noResultsEl.style.display = "none";
+            }
+        }
+
+        input.addEventListener("input", filterList);
+        filterList();
+    });
+</script>
+
+
 {% endblock %}

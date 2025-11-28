@@ -123,6 +123,11 @@
   font-size: .9rem;
   display: flex;
   align-items: center;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    padding-left 0.25s ease;
 }
 
 .sidebar-menu li a span {
@@ -131,6 +136,12 @@
   margin-right: .8rem;
 }
 
+.sidebar-menu li a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(3px);
+  padding-left: 0.65rem;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
+}
 
 header {
   position: fixed;
@@ -349,6 +360,7 @@ main {
   text-align: center;
   font-weight: 600;
 }
+
 .repo-desc {
   font-size: 1rem;
   color: var(--color-descripcion);
@@ -661,4 +673,3 @@ main {
     max-height: 150px !important;
   }
 }
-

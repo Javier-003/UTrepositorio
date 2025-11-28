@@ -1,9 +1,91 @@
 {% extends "base_home.html" %}
+{% block body_class %}archivos-page{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/leer_archivo.css') }}">
+{% endblock %}
 {% block content %}
-<h2>Archivo: {{ archivo }} en {{ repo }}</h2>
 
+<input type="checkbox" id="sidebar-toggle">
+
+{% if 'user' in session %}
+
+<!-- Calculamos la ruta padre ANTES del sidebar -->
 {% set parent_path = archivo.rsplit('/', 1)[0] if '/' in archivo else '' %}
-<a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=parent_path) }}">🔙 Volver</a>
 
-<pre style="background:#f5f5f5; padding:10px; border:1px solid #ccc;">{{ contenido }}</pre>
+<!-- Sidebar -->
+<div class="sidebar">
+
+    <label for="sidebar-toggle" class="close-sidebar">
+        <span class="las la-times"></span>
+    </label>
+
+    <div class="sidebar-main">
+        <div class="sidebar-user">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="{{ url_for('repos.explorar_archivos', nombre=repo, path=parent_path) }}">
+                        <span class="las la-arrow-left"></span>
+                        Volver
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('usuarios.logout') }}">
+                        <span class="las la-sign-out-alt"></span>
+                        Cerrar Sesión
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <header>
+        <div class="menu-toggle">
+            <label for="sidebar-toggle">
+                <span class="las la-bars"></span>
+            </label>
+        </div>
+
+        <div class="header-icons">
+            <div class="user-info">
+                <span class="las la-user"></span>
+                <h3>{{ session.get('user')['username'] }}</h3>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="page-header">
+            <div>
+                <h1>Repositorio {{ repo }}</h1>
+                <h3>Archivo: {{ archivo }}</h3>
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="card-single">
+                <div class="card-flex">
+                    <div class="card-info">
+                        <pre>
+{{ contenido }}
+                        </pre>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
 {% endblock %}

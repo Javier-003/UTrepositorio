@@ -60,7 +60,6 @@
     padding: 1rem 1.5rem;
     background: linear-gradient(180deg, #18386b, #648fc0);
     color: var(--color-light);
-    /* Mejor contraste con el degradado */
     z-index: 20;
     transition: left 300ms;
 }
@@ -124,12 +123,24 @@
     display: flex;
     align-items: center;
     font-weight: 500;
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        padding-left 0.25s ease;
 }
 
 .sidebar-menu li a span {
     font-size: 1.5rem;
     display: inline-block;
     margin-right: .8rem;
+}
+
+.sidebar-menu li a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(3px);
+    padding-left: 0.65rem;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
 }
 
 
@@ -149,19 +160,16 @@ header {
     transition: left 300ms, width 300ms;
 }
 
-/* === Usuario en header === */
 .header-icons {
     display: flex;
     align-items: center;
     gap: 1rem;
-    /* espacio entre los íconos */
 }
 
 .user-info {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    /* espacio entre el icono y el nombre */
 }
 
 .user-info span {
@@ -249,18 +257,15 @@ main {
     padding: 1rem;
     box-shadow: 4px 3px 10px rgb(0, 0, 0, 0.2);
     border-radius: 5px;
-    /* 🔹 Asegura que el texto nunca se desborde */
     white-space: normal;
-    /* Permite saltos de línea */
     overflow-wrap: break-word;
-    /* Rompe palabras largas automáticamente */
     word-wrap: break-word;
-    /* Compatibilidad */
 }
+
 .card-info pre {
-    white-space: pre-wrap !important; /* Mantiene formato pero permite saltos */
-    overflow-wrap: break-word !important; /* Rompe URLs muy largas */
-    word-break: break-word !important; /* Seguridad extra */
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
 }
 
 
@@ -305,7 +310,7 @@ main {
         left: 0;
     }
 
-    card {
+    .cards {
         grid-template-columns: repeat(2, 1rf);
     }
 }

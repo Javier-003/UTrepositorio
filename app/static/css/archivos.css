@@ -144,6 +144,13 @@
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
 }
 
+
+.sidebar-menu li a:hover span {
+    transform: scale(1.06);
+    transition: transform 0.25s ease;
+}
+
+
 header {
     position: fixed;
     top: 0;
@@ -160,6 +167,7 @@ header {
     transition: left 300ms, width 300ms;
 }
 
+/* === Usuario en header === */
 .header-icons {
     display: flex;
     align-items: center;
@@ -255,26 +263,6 @@ main {
     justify-content: space-between;
 }
 
-.btn-new-repo {
-    background: #4B6A9B;
-    color: white;
-    padding: 7px 16px;
-    border-radius: 8px;
-    font-size: 1.0rem;
-    text-decoration: none;
-    transition: 0.3s;
-    white-space: nowrap;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-}
-
-.btn-new-repo:hover {
-    background: #3a537a;
-}
-
 
 .page-header h1 {
     color: var(--color-primary);
@@ -282,27 +270,11 @@ main {
     font-weight: 600;
 }
 
-.header-actions button {
-    outline: none;
-    background: var(--color-primary);
-    border: none;
-    color: var(--color-light);
-    padding: .6rem 1rem;
-    margin-left: 1rem;
-    border-radius: 3px;
-    font-weight: 600;
-}
-
-.header-actions button span {
-    font-size: 1.2rem;
-    margin-right: .6rem;
-}
-
 
 /* ==== GRID DE LAS CARDS ==== */
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     margin-top: 2rem;
     grid-gap: 1.8rem;
 }
@@ -316,14 +288,17 @@ main {
     cursor: pointer;
 }
 
+
 .card-single:hover {
     transform: translateY(-6px);
     box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.25);
 }
 
+
 .card-flex {
     display: block;
 }
+
 
 
 .title-row {
@@ -360,254 +335,11 @@ main {
     margin-top: 5px;
 }
 
-
-.repo-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 1rem;
-}
-
-.repo-buttons .btn,
-.repo-buttons button.btn {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: none;
-    background: #4B6A9B;
-    color: white;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: 0.3s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    white-space: nowrap;
-}
-
-
-.repo-buttons .btn.delete {
-    background: #E57373;
-}
-
-.repo-buttons .btn.delete:hover {
-    background: #D9534F;
-}
-
-.repo-buttons form {
-    margin: 0;
-    width: 100%;
-}
-
-.repo-buttons form button {
-    all: unset;
-    padding: 8px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #E57373;
-    color: white;
-    text-align: center;
-    transition: 0.3s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.repo-buttons form button:hover {
-    background: #D9534F;
-}
-
-
-/* ====== FORMULARIO ====== */
-
-h2 {
-    margin-top: 30px;
-    color: var(--color-primary);
-    text-align: center;
-}
-
-body.dashboard-page form {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-body.dashboard-page form div {
-    margin-bottom: 15px;
-}
-
-body.dashboard-page input[type="text"]:not(#search-input),
-body.dashboard-page input[type="date"],
-body.dashboard-page textarea,
-body.dashboard-page select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background-color: var(--color-light);
-}
-
-form button[type="submit"] {
-    background: var(--color-primary);
-    color: white;
-    width: 100%;
-    padding: 12px 0;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+.no-results {
+    background: transparent;
+    color: var(--color-accent);
     font-weight: 500;
-    font-size: 1rem;
-    transition: 0.3s;
-    margin-top: 20px;
-    display: block;
-    text-align: center;
 }
-
-form button[type="submit"]:hover {
-    opacity: 0.95;
-    transform: translateY(-2px);
-}
-
-
-#add-integrante,
-#remove-integrante {
-    background: #4B6A9B;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    margin-top: 5px;
-    transition: 0.3s;
-}
-
-
-#add-integrante:hover,
-#remove-integrante:hover {
-    background: #3b567d;
-    transform: scale(1.05);
-}
-
-
-#add-integrante {
-    border-radius: 50px;
-    padding: 6px 14px;
-}
-
-
-#remove-integrante {
-    background: #E57373;
-}
-
-#remove-integrante:hover {
-    background: #D9534F;
-}
-
-
-.file-input-label input[type="file"] {
-    display: none;
-}
-
-
-.file-input-label {
-    display: inline-block;
-    padding: 10px 16px;
-    background: var(--color-primary);
-    color: white;
-    font-size: 0.95rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    text-align: center;
-    margin-top: 10px;
-}
-
-
-.file-input-label:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.modal-content {
-    background: white;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 20px;
-    border-radius: 10px;
-    position: relative;
-}
-
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    cursor: pointer;
-}
-
-.flash-container {
-    margin-bottom: 1rem;
-}
-
-.alert {
-    padding: 0.8rem;
-    border-radius: 6px;
-    margin-bottom: .8rem;
-    font-weight: 500;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.4s ease;
-}
-
-/* Tipos de alertas */
-.alert.success {
-    color: var(--color-descripcion);
-}
-
-.alert.error {
-    color: var(--color-descripcion);
-}
-
-.alert.info {
-    color: var(--color-descripcion);
-}
-
-.alert.warning {
-    color: var(--color-descripcion);
-}
-
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 
 
 @media only screen and (max-width: 1124px) {
